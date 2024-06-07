@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -17,36 +16,36 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(HomeTab)"
         options={{
-          title: 'Home',
+          title: 'Accueil',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={focused ? 'orange' : 'gray'} />
           ),
         }}
       />
       <Tabs.Screen
         name="(SearchTab)"
         options={{
-          title: 'Search',
+          title: 'Recherche',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'search' : 'search-outline'} color={color} />
+            <TabBarIcon name={focused ? 'search' : 'search-outline'} color={focused ? 'orange' : 'gray'} />
           ),
         }}
       />
       <Tabs.Screen
         name="(CartTab)"
         options={{
-          title: 'Cart',
+          title: 'Panier',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'cart' : 'cart-outline'} color={color} />
+            <TabBarIcon name={focused ? 'cart' : 'cart-outline'} color={focused ? 'orange' : 'gray'} />
           ),
         }}
       />
       <Tabs.Screen
         name="(AccountTab)"
         options={{
-          title: 'Account',
+          title: 'Compte',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
+            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={focused ? 'orange' : 'gray'} />
           ),
         }}
       />

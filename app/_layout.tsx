@@ -6,6 +6,9 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import 'expo-dev-client';
 import 'react-native-gesture-handler';
+import 'react-native-safe-area-context';
+import 'react-native-screens';
+import  Header  from '@/app/Header';
 
 
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -31,6 +34,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Header />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />

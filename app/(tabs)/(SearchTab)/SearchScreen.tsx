@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, View, ScrollView } from "react-native";
 
 export default function SearchScreen() {
   return (
@@ -9,7 +9,14 @@ export default function SearchScreen() {
         alignItems: "center",
       }}
     >
+      <ScrollView
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
       <Text> Search Screen.</Text>
+      </ScrollView>
     </View>
   );
 }
