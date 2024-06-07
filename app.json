@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Airnest",
-    "slug": "Airnest",
+    "slug": "airnest",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo_airnest_store.png",

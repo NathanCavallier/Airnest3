@@ -4,6 +4,9 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import 'expo-dev-client';
+import 'react-native-gesture-handler';
+
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 

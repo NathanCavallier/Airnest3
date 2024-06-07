@@ -15,7 +15,7 @@ export default function TabLayout() {
         headerShown: false,
       }}>
       <Tabs.Screen
-        name="index"
+        name="(HomeTab)"
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
@@ -24,11 +24,29 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="(SearchTab)"
         options={{
-          title: 'Explore',
+          title: 'Search',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'search' : 'search-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="(CartTab)"
+        options={{
+          title: 'Cart',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'cart' : 'cart-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="(AccountTab)"
+        options={{
+          title: 'Account',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
           ),
         }}
       />
