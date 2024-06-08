@@ -6,7 +6,7 @@ interface MenuContextType {
   closeMenu: () => void;
 }
 
-const MenuContext = createContext<MenuContextType | undefined>(undefined);
+export const MenuContext = createContext<MenuContextType | undefined>(undefined);
 
 export const MenuProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);

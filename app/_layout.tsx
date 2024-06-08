@@ -8,7 +8,8 @@ import 'expo-dev-client';
 import 'react-native-gesture-handler';
 import 'react-native-safe-area-context';
 import 'react-native-screens';
-import  Header  from '@/app/Header';
+import Header from '@/app/Header';
+import { MenuProvider } from '@/contexts/MenuContext';
 
 
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -33,12 +34,14 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Header />
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <MenuProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Header />
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </ThemeProvider>
+    </MenuProvider>
   );
 }

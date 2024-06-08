@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, FlatList, Image } from 'react-native';
 import { api } from '@/api';
-import Carousel from 'react-native-snap-carousel';
+import Carousel from '@/components/Carousel';
 import Menu from '@/app/Menu';
 import { MenuProvider, useMenu } from '@/contexts/MenuContext';
 import Header from '@/app/Header';
+import PropTypes from 'prop-types';
 
 const defaultImage = require('@/assets/images/default.png'); // Chemin de votre image par défaut
 
@@ -50,22 +51,22 @@ const Index = ({ navigation }: { navigation: any }) => {
         };
 
         fetchData();
-    }, []);
+    }, []); 
 
     const renderCarouselItem = ({ item }: { item: { image: string; title: string; } }) => (
-        <Image source={{ uri: item.image }} />
+        <Image source={{ uri: item.image }} style={{ width: 300, height: 200 }} />
     );
 
     const renderCategoryItem = ({ item }: { item: { image: string; title: string; } }) => (
         <View>
-            <Image source={{ uri: item.image }}  />
+            <Image source={{ uri: item.image }} style={{ width: 100, height: 100 }} />
             <Text>{item.title}</Text>
         </View>
     );
 
     const renderProductItem = ({ item }: { item: { image: string; title: string; price: number; } }) => (
         <View>
-            <Image source={{ uri: item.image }} />
+            <Image source={{ uri: item.image }} style={{ width: 100, height: 100 }} />
             <Text>{item.title}</Text>
             <Text>${item.price}</Text>
         </View>
@@ -101,6 +102,10 @@ const Index = ({ navigation }: { navigation: any }) => {
             </View>
         </MenuProvider>
     );
+};
+
+Index.propTypes = {
+    navigation: PropTypes.object.isRequired,
 };
 
 export default Index;
