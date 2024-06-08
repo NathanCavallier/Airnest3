@@ -13,6 +13,18 @@ export default function HomeLayout() {
         headerShown: false,
       }}  
     />
+    <Stack.Screen
+      name="ProductScreen"
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="CategoryScreen"
+      options={{
+        headerShown: false,
+      }}
+    />
     </Stack>
   );
 }

@@ -26,11 +26,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="(SearchTab)"
+        name="(CategoryTab)"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? { borderTopWidth: 2, borderTopColor: 'orange' } : {}}>
-              <TabBarIcon name={focused ? 'search' : 'search-outline'} color={focused ? 'orange' : 'gray'} style={{ margin: 8, marginTop: 18 }} />
+              <TabBarIcon name={focused ? 'apps' : 'apps-outline'} color={focused ? 'orange' : 'gray'} style={{ margin: 8, marginTop: 18 }} />
             </View>
           ),
         }}

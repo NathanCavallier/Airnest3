@@ -1,14 +1,21 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { View, Text, ScrollView, FlatList, Image } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 
-const Carousel = ({ data, renderItem, sliderWidth, itemWidth } : { data: any, renderItem: any, sliderWidth: any, itemWidth: any }) => {
+const Carousel = ({ data, renderItem, sliderWidth, itemWidth }: { data: any, renderItem: any, sliderWidth: any, itemWidth: any }) => {
     return (
-        <ScrollView>
+        <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            decelerationRate="fast"
+            snapToInterval={itemWidth}
+            snapToAlignment="center"
+            contentContainerStyle={{ width: sliderWidth }}
+        >
             {/* Votre code pour afficher les items du carousel */}
-            {data.map(({item, index}: {item: any, index: any}) => (
-                <View key={index} style={{ width: itemWidth }}>
-                    {renderItem({ item })}
+            {data.map((item: any, index: number) => (
+                <View key={item.id || index.toString()} style={{ width: itemWidth, margin: 5 }}>
+                    {item ? renderItem({ item }) : <Text>Cette article n'existe pas!</Text>}
                 </View>
             ))}
         </ScrollView>
@@ -21,5 +28,11 @@ Carousel.propTypes = {
     sliderWidth: PropTypes.number.isRequired,
     itemWidth: PropTypes.number.isRequired,
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+});
 
 export default Carousel;
