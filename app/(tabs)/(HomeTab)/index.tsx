@@ -6,12 +6,46 @@ import Menu from '@/app/Menu';
 import { MenuProvider, useMenu } from '@/contexts/MenuContext';
 import Header from '@/app/Header';
 import PropTypes from 'prop-types';
+import { Route, RouteProp, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import CategoryScreen from './CategoryScreen';
 
+
+type CarouselItem = {
+    id: number;
+    image: string;
+    title: string;
+};
+
+type ProductScreenProps = {
+    id: number;
+    image: string;
+    title: string;
+    price: number;
+};
+
+type CategoryStackParamList = {
+    [key: string]: number | string;
+    id: number;
+    image: string;
+    title: string;
+};
+
+// Type pour les props du composant
+type CategoryScreenRouteProps = RouteProp<CategoryStackParamList, 'CategoryScreen'>;
+type CategoryScreenNavigationProps = StackNavigationProp<CategoryStackParamList, 'CategoryScreen'>;
+type CategoryScreenProps = {
+    route: CategoryScreenRouteProps;
+    navigation: CategoryScreenNavigationProps;
+};
 
 const defaultImage = require('@/assets/images/default.png'); // Chemin de votre image par défaut
 
-const Index = ({ navigation }: { navigation: any }) => {
-    const [carouselItems, setCarouselItems] = useState<any[]>([]);
+const Index = () => {
+    const navigation = useNavigation();
+
+    const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
+    const [productItems, setProductItems] = useState<ProductScreenProps[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
     const { isMenuVisible, closeMenu } = useMenu();
@@ -21,16 +55,35 @@ const Index = ({ navigation }: { navigation: any }) => {
             try {
                 const response = await api.get('products');
                 const data = response.data || [];
-                setCarouselItems(data.map((product: { id: number; image: string; title: string; }) => ({
-                    id: product.id,
-                    image: product?.image || defaultImage,
-                    title: product?.title || 'Pas de titre',
-                })));
-                setCategories(data.map((product: any) => ({
-                    id: product.id,
-                    image: product?.category?.image || defaultImage,
-                    title: product?.category?.title || 'Pas de titre'
-                })));
+
+                // Récupérer les produits pour le carousel
+                var featuredProducts: any[] = [];
+                data.forEach((product: any) => {
+                    if (product?.featured) {
+                        featuredProducts.push({
+                            id: product.id,
+                            image: product?.image || defaultImage,
+                            title: product?.title || 'Pas de titre',
+                        });
+                    }
+                });
+                setCarouselItems(featuredProducts);
+
+                // Récupérer les catégories uniques
+                var allCategoriesTitles: any[] = [];
+                var uniqueCategories: any[] = [];
+                data.forEach((product: any) => {
+                    if (product?.category?.title && !allCategoriesTitles.includes(product?.category?.title)) {
+                        allCategoriesTitles.push(product?.category?.title);
+                        uniqueCategories.push({
+                            id: product?.category?.id || 0,
+                            image: product?.category?.image || defaultImage,
+                            title: product?.category?.title || 'Pas de titre',
+                        });
+                    }
+                });
+                setCategories(uniqueCategories);
+
                 setProducts(data.filter((product: any) => product?.featured).map((product: any) => ({
                     id: product.id,
                     image: product?.image || defaultImage,
@@ -45,32 +98,25 @@ const Index = ({ navigation }: { navigation: any }) => {
         fetchData();
     }, []);
 
-    const handleCategoryPress = (categoryId: number) => {
-        navigation.navigate('CategoryScreen', { categoryId });
-    };
-
-    const handleProductPress = (productId: number) => {
-        navigation.navigate('ProductScreen', { productId });
-    };
-
     const renderCarouselItem = ({ item }: { item: { image: string; title: string; } }) => (
         <Image source={{ uri: item.image }} style={styles.carouselImage} />
     );
 
-    const renderCategoryItem = ({ item }: { item: { image: string; title: string; categoryId: number; } }) => (
-        <TouchableOpacity style={styles.categoryItem} onPress={() => handleCategoryPress(item.categoryId)}>
+    const renderCategoryItem = ({ item }: { item: { image: string; title: string; id: number; } }) => (
+        <TouchableOpacity style={styles.categoryItem} onPress={() => { navigation.navigate('CategoryScreen', { categoryId: item.id }); } }>
             <Image source={{ uri: item.image }} style={styles.categoryImage} />
             <Text style={styles.categoryTitle}>{item.title}</Text>
         </TouchableOpacity>
     );
 
-    const renderProductItem = ({ item }: { item: { image: string; title: string; price: number; } }) => (
-        <View style={styles.productItem}>
+    const renderProductItem = ({ item }: { item: { id: number; image: string; title: string; price: number; } }) => (
+        <TouchableOpacity style={styles.productItem} >
             <Image source={{ uri: item.image }} style={styles.productImage} />
             <Text style={styles.productTitle}>{item.title}</Text>
             <Text style={styles.productPrice}>${item.price}</Text>
-        </View>
+        </TouchableOpacity>
     );
+
 
     const listHeaderComponent = () => (
         <>
@@ -81,7 +127,7 @@ const Index = ({ navigation }: { navigation: any }) => {
                 itemWidth={300}
             />
             <Text style={styles.welcomeText}>Venant des hautes terres d'Écosse,
-             nos meubles sont éternels et robustes.
+                nos meubles sont éternels et robustes.
             </Text>
             <Text style={styles.sectionTitle}>Catégories</Text>
             <FlatList
@@ -110,10 +156,10 @@ const Index = ({ navigation }: { navigation: any }) => {
         </MenuProvider>
     );
 };
-
+/*
 Index.propTypes = {
     navigation: PropTypes.object.isRequired,
-};
+}; */
 
 const styles = StyleSheet.create({
     container: {
