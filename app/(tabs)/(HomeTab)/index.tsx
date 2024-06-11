@@ -6,9 +6,11 @@ import Menu from '@/app/Menu';
 import { MenuProvider, useMenu } from '@/contexts/MenuContext';
 import Header from '@/app/Header';
 import PropTypes from 'prop-types';
-import { Route, RouteProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import CategoryScreen from './CategoryScreen';
+import { ProductScreenRouteParams, CategoryScreenRouteParams } from '../../../types'; 
+import { Link, useRoute } from '@react-navigation/native';
 
 
 type CarouselItem = {
@@ -24,31 +26,18 @@ type ProductScreenProps = {
     price: number;
 };
 
-type CategoryStackParamList = {
-    [key: string]: number | string;
-    id: number;
-    image: string;
-    title: string;
-};
-
-// Type pour les props du composant
-type CategoryScreenRouteProps = RouteProp<CategoryStackParamList, 'CategoryScreen'>;
-type CategoryScreenNavigationProps = StackNavigationProp<CategoryStackParamList, 'CategoryScreen'>;
-type CategoryScreenProps = {
-    route: CategoryScreenRouteProps;
-    navigation: CategoryScreenNavigationProps;
-};
-
 const defaultImage = require('@/assets/images/default.png'); // Chemin de votre image par défaut
 
 const Index = () => {
     const navigation = useNavigation();
-
     const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
     const [productItems, setProductItems] = useState<ProductScreenProps[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
     const { isMenuVisible, closeMenu } = useMenu();
+    const route = useRoute();
+    var { productId } = route.params as ProductScreenRouteParams || { productId: 0 };
+    var { categoryId } = route.params as CategoryScreenRouteParams || { categoryId: 0 };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,38 +46,36 @@ const Index = () => {
                 const data = response.data || [];
 
                 // Récupérer les produits pour le carousel
-                var featuredProducts: any[] = [];
-                data.forEach((product: any) => {
-                    if (product?.featured) {
-                        featuredProducts.push({
-                            id: product.id,
-                            image: product?.image || defaultImage,
-                            title: product?.title || 'Pas de titre',
-                        });
-                    }
-                });
+                const featuredProducts = data
+                    .filter((product: { featured: any; }) => product.featured)
+                    .map((product: { id: any; image: any; title: any; }) => ({
+                        id: product.id,
+                        image: product.image || defaultImage,
+                        title: product.title || 'Pas de titre',
+                    }));
                 setCarouselItems(featuredProducts);
 
                 // Récupérer les catégories uniques
-                var allCategoriesTitles: any[] = [];
-                var uniqueCategories: any[] = [];
-                data.forEach((product: any) => {
-                    if (product?.category?.title && !allCategoriesTitles.includes(product?.category?.title)) {
-                        allCategoriesTitles.push(product?.category?.title);
+                const allCategoriesTitles: any[] = [];
+                const uniqueCategories: { id: number; image: string; title: string }[] = [];
+
+                data.forEach((product: { category: any; }) => {
+                    if (!allCategoriesTitles.includes(product.category.title)) {
+                        allCategoriesTitles.push(product.category.title);
                         uniqueCategories.push({
-                            id: product?.category?.id || 0,
-                            image: product?.category?.image || defaultImage,
-                            title: product?.category?.title || 'Pas de titre',
+                            id: product.category.id,
+                            image: product.category.image || defaultImage,
+                            title: product.category.title || 'Pas de titre',
                         });
                     }
                 });
                 setCategories(uniqueCategories);
 
-                setProducts(data.filter((product: any) => product?.featured).map((product: any) => ({
+                setProducts(data.filter((product: { featured: any; }) => product.featured).map((product: { id: any; image: any; title: any; price: any; }) => ({
                     id: product.id,
-                    image: product?.image || defaultImage,
-                    title: product?.title || 'Pas de titre',
-                    price: product?.price || 0
+                    image: product.image || defaultImage,
+                    title: product.title || 'Pas de titre',
+                    price: product.price || 0,
                 })));
             } catch (error) {
                 console.error(error);
@@ -98,25 +85,26 @@ const Index = () => {
         fetchData();
     }, []);
 
-    const renderCarouselItem = ({ item }: { item: { image: string; title: string; } }) => (
-        <Image source={{ uri: item.image }} style={styles.carouselImage} />
+    const renderCarouselItem = ({ item }: { item: CarouselItem }) => (
+        <TouchableOpacity style={styles.carouselItem} onPress={() => navigation.navigate('ProductScreen', {productId: item.id})}>
+            <Image source={{ uri: item.image }} style={styles.carouselImage} />
+        </TouchableOpacity>
     );
 
-    const renderCategoryItem = ({ item }: { item: { image: string; title: string; id: number; } }) => (
-        <TouchableOpacity style={styles.categoryItem} onPress={() => { navigation.navigate('CategoryScreen', { categoryId: item.id }); } }>
+    const renderCategoryItem = ({ item }: { item: { id: number; image: string; title: string } }) => (
+        <TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate('CategoryScreen', { id: item.id, image: item.image, title: item.title })}>
             <Image source={{ uri: item.image }} style={styles.categoryImage} />
             <Text style={styles.categoryTitle}>{item.title}</Text>
         </TouchableOpacity>
     );
 
-    const renderProductItem = ({ item }: { item: { id: number; image: string; title: string; price: number; } }) => (
-        <TouchableOpacity style={styles.productItem} >
+    const renderProductItem = ({ item }: { item: ProductScreenProps }) => (
+        <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductScreen', { id: item.id, image: item.image, title: item.title, price: item.price })}>
             <Image source={{ uri: item.image }} style={styles.productImage} />
             <Text style={styles.productTitle}>{item.title}</Text>
             <Text style={styles.productPrice}>${item.price}</Text>
         </TouchableOpacity>
     );
-
 
     const listHeaderComponent = () => (
         <>
@@ -156,10 +144,6 @@ const Index = () => {
         </MenuProvider>
     );
 };
-/*
-Index.propTypes = {
-    navigation: PropTypes.object.isRequired,
-}; */
 
 const styles = StyleSheet.create({
     container: {
@@ -172,7 +156,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginVertical: 16,
         textAlign: 'center',
-        color: 'gray'
+        color: 'gray',
     },
     sectionTitle: {
         fontSize: 16,
@@ -184,6 +168,9 @@ const styles = StyleSheet.create({
         width: 300,
         height: 200,
         borderRadius: 8,
+    },
+    carouselItem: {
+        margin: 8,
     },
     categoryItem: {
         marginRight: 16,

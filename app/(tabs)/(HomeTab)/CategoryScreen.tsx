@@ -1,26 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, Button } from 'react-native';
 import { api } from '@/api';
 import PropTypes from 'prop-types';
+import { Ionicons } from '@expo/vector-icons';
+import { Link, useRoute } from '@react-navigation/native';
+import { CategoryScreenRouteParams } from '@/types';
+import { useLocalSearchParams } from 'expo-router';
+import { ProductScreenRouteParams } from '@/types';
 
-const CategoryScreen = ({ route, navigation }: { route: any, navigation: any }) => {
-    const { categoryId } = route.params;
+
+const CategoryScreen = () => {
+
+    const route = useRoute();
+    const { categoryId } = route.params as CategoryScreenRouteParams || { categoryId: 1 };
     const [products, setProducts] = useState<any[]>([]);
+    const params = useLocalSearchParams<{ q?: string }>();
+    var { productId } = route.params as ProductScreenRouteParams || { productId: 0 };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await api.get(`products`);
+                var productsList: any[] = [];
                 response.data.forEach((product: any) => {
-                    if (product.category.id === categoryId) {
-                        setProducts((prevProducts) => [...prevProducts, {
-                            image: product.image,
-                            title: product.title,
-                            price: product.price,
-                            productId: product.id,
-                        }]);
+                    if (product.categoryId === params.q) {
+                        productsList.push(product);
                     }
                 });
+                console.log(params.q);
+                setProducts(productsList);
             } catch (error) {
                 console.error(error);
             }
@@ -37,9 +45,13 @@ const CategoryScreen = ({ route, navigation }: { route: any, navigation: any }) 
         </View>
     );
 
+
     return (
         <View style={styles.container}>
             <Text style={styles.sectionTitle}>Produits de la catégorie</Text>
+            <Link to="/(tabs)/Index">
+                <Ionicons name="arrow-back" size={24} color="orange" />
+            </Link>
             <FlatList
                 data={products}
                 renderItem={renderProductItem}
@@ -48,11 +60,6 @@ const CategoryScreen = ({ route, navigation }: { route: any, navigation: any }) 
             />
         </View>
     );
-};
-
-CategoryScreen.propTypes = {
-    route: PropTypes.object.isRequired,
-    navigation: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -64,6 +71,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginVertical: 10,
+        color: 'gray',
     },
     productItem: {
         flex: 1,
