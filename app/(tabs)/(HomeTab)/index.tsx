@@ -92,7 +92,7 @@ const Index = () => {
     );
 
     const renderCategoryItem = ({ item }: { item: { id: number; image: string; title: string } }) => (
-        <TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate('CategoryScreen', { id: item.id, image: item.image, title: item.title })}>
+        <TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate('CategoryScreen', { id: item.id })}>
             <Image source={{ uri: item.image }} style={styles.categoryImage} />
             <Text style={styles.categoryTitle}>{item.title}</Text>
         </TouchableOpacity>

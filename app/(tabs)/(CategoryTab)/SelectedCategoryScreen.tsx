@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, Button } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { api } from '@/api';
 import PropTypes from 'prop-types';
-import { Ionicons } from '@expo/vector-icons';
 import { Link, useRoute } from '@react-navigation/native';
 import { CategoryScreenRouteParams } from '@/types';
 import { useLocalSearchParams } from 'expo-router';
 import { ProductScreenRouteParams } from '@/types';
+import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
-const CategoryScreen = () => {
+const SelectedCategoryScreen = () => {
 
+    const navigation = useNavigation();
     const route = useRoute();
     const { categoryId } = route.params as CategoryScreenRouteParams || { categoryId: 1 };
     const [products, setProducts] = useState<any[]>([]);
@@ -27,7 +29,6 @@ const CategoryScreen = () => {
                         productsList.push(product);
                     }
                 });
-                console.log(params.q);
                 setProducts(productsList);
             } catch (error) {
                 console.error(error);
@@ -36,6 +37,21 @@ const CategoryScreen = () => {
 
         fetchData();
     }, [categoryId]);
+
+    // Retour à la page précédente
+    const goBack = () => {
+        return (
+            <View style={{ flex: 1 }}>
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}
+                >
+                    <Ionicons name="arrow-back" size={24} color="orange" />
+                    <Text>Retour</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    };
 
     const renderProductItem = ({ item }: { item: { image: string; title: string; price: number; productId: number; } }) => (
         <View style={styles.productItem}>
@@ -54,8 +70,9 @@ const CategoryScreen = () => {
 
     return (
         <View style={styles.container}>
+            {goBack()}
             <Text style={styles.sectionTitle}>Produits de la catégorie</Text>
-            <Link to="/(tabs)/Index">
+            <Link to="/AllCategoriesScreen">
                 <Ionicons name="arrow-back" size={24} color="orange" />
             </Link>
             <FlatList
@@ -99,4 +116,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CategoryScreen;
+export default SelectedCategoryScreen;

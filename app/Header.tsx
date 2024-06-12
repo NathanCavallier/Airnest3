@@ -3,7 +3,7 @@ import { View, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import { ThemedView } from '../components/ThemedView';
-import SearchScreen from './(tabs)/(CategoryTab)/SearchScreen';
+import SearchScreen from './(tabs)/(CategoryTab)/AllCategoriesScreen';
 import SearchLayout from './(tabs)/(CategoryTab)/_layout';
 import CartScreen from './(tabs)/(CartTab)/CartScreen';
 import AccountScreen from './(tabs)/(AccountTab)/AccountScreen';

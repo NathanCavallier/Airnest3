@@ -9,10 +9,16 @@ export default function SearchLayout() {
       headerShown: false,
     }}>
       <Stack.Screen 
-      name="SearchScreen" 
+      name="AllCategoriesScreen" 
       options={{
         headerShown: false,
       }}  
+    />
+    <Stack.Screen
+      name="SelectedCategoryScreen"
+      options={{
+        headerShown: false,
+      }}
     />
     </Stack>
   );
