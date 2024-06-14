@@ -1,18 +1,18 @@
-# L'application mobile du projet ÀIRNEIS offre une expérience utilisateur optimisée pour les appareils mobiles, permettant aux utilisateurs de parcourir et d'acheter des meubles conçus par des designers écossais. Ses fonctionnalités principales incluent :
+## L'application mobile du projet ÀIRNEIS offre une expérience utilisateur optimisée pour les appareils mobiles, permettant aux utilisateurs de parcourir et d'acheter des meubles conçus par des designers écossais. Ses fonctionnalités principales incluent :
 
-## Navigation et Recherche : L'application propose une navigation intuitive avec une barre de recherche pour trouver rapidement des produits par nom, description, matériau, prix ou catégorie.
+- Navigation et Recherche : L'application propose une navigation intuitive avec une barre de recherche pour trouver rapidement des produits par nom, description, matériau, prix ou catégorie.
 
-## Catalogue de Produits : Les utilisateurs peuvent explorer les catégories de produits, consulter les détails des articles (images, descriptions, matériaux, prix, et disponibilité en stock) et visualiser des produits similaires.
+- Catalogue de Produits : Les utilisateurs peuvent explorer les catégories de produits, consulter les détails des articles (images, descriptions, matériaux, prix, et disponibilité en stock) et visualiser des produits similaires.
 
-## Gestion du Panier et Commande : Les utilisateurs peuvent ajouter des articles à leur panier, consulter le récapitulatif de leur panier, et finaliser leurs achats via un processus de commande sécurisé.
+- Gestion du Panier et Commande : Les utilisateurs peuvent ajouter des articles à leur panier, consulter le récapitulatif de leur panier, et finaliser leurs achats via un processus de commande sécurisé.
 
-## Compte Utilisateur : L'application permet aux utilisateurs de gérer leurs comptes, y compris la connexion, l'inscription, les paramètres de compte, et le suivi des commandes passées.
+- Compte Utilisateur : L'application permet aux utilisateurs de gérer leurs comptes, y compris la connexion, l'inscription, les paramètres de compte, et le suivi des commandes passées.
 
-## Multilingue et Accessibilité : L'application est disponible en plusieurs langues et respecte les normes d'accessibilité pour garantir une utilisation par tous.
+- Multilingue et Accessibilité : L'application est disponible en plusieurs langues et respecte les normes d'accessibilité pour garantir une utilisation par tous.
 
-## Backoffice : Une interface web est disponible pour les administrateurs afin de gérer le contenu de l'application, les produits, les catégories, et les commandes.
+- Backoffice : Une interface web est disponible pour les administrateurs afin de gérer le contenu de l'application, les produits, les catégories, et les commandes.
 
-## Sécurité : Des mesures de sécurité rigoureuses sont mises en place pour protéger les données des utilisateurs et les transactions financières.
+- Sécurité : Des mesures de sécurité rigoureuses sont mises en place pour protéger les données des utilisateurs et les transactions financières.
 
 Cette application mobile se distingue de la version web mobile par une interface utilisateur (UX/UI) spécialement adaptée pour une utilisation fluide sur les appareils mobiles ​​.
 
