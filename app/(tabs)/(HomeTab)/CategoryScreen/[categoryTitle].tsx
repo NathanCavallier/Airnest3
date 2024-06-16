@@ -2,22 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { api } from '@/api';
 import PropTypes from 'prop-types';
+import { Ionicons } from '@expo/vector-icons';
 import { Link, useRoute } from '@react-navigation/native';
 import { CategoryScreenRouteParams } from '@/types';
 import { useLocalSearchParams } from 'expo-router';
 import { ProductScreenRouteParams } from '@/types';
-import { useNavigation } from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
-const SelectedCategoryScreen = () => {
+const CategoryScreen = () => {
 
-    const navigation = useNavigation();
-    const route = useRoute();
-    const { categoryId } = route.params as CategoryScreenRouteParams || { categoryId: 1 };
+    const { categoryTitle } = useLocalSearchParams() || { categoryTitle: 'Pas de titre' };
     const [products, setProducts] = useState<any[]>([]);
-    const params = useLocalSearchParams<{ q?: string }>();
-    var { productId } = route.params as ProductScreenRouteParams || { productId: 0 };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,7 +20,7 @@ const SelectedCategoryScreen = () => {
                 const response = await api.get(`products`);
                 var productsList: any[] = [];
                 response.data.forEach((product: any) => {
-                    if (product.categoryId === params.q) {
+                    if (product.category.title === categoryTitle) {
                         productsList.push(product);
                     }
                 });
@@ -36,22 +31,7 @@ const SelectedCategoryScreen = () => {
         };
 
         fetchData();
-    }, [categoryId]);
-
-    // Retour à la page précédente
-    const goBack = () => {
-        return (
-            <View style={{ flex: 1 }}>
-                <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}
-                >
-                    <Ionicons name="arrow-back" size={24} color="orange" />
-                    <Text>Retour</Text>
-                </TouchableOpacity>
-            </View>
-        );
-    };
+    }, [categoryTitle]);
 
     const renderProductItem = ({ item }: { item: { image: string; title: string; price: number; productId: number; } }) => (
         <View style={styles.productItem}>
@@ -70,9 +50,8 @@ const SelectedCategoryScreen = () => {
 
     return (
         <View style={styles.container}>
-            {goBack()}
             <Text style={styles.sectionTitle}>Produits de la catégorie</Text>
-            <Link to="/AllCategoriesScreen">
+            <Link to="/(tabs)/Index">
                 <Ionicons name="arrow-back" size={24} color="orange" />
             </Link>
             <FlatList
@@ -116,4 +95,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SelectedCategoryScreen;
+export default CategoryScreen;

@@ -14,13 +14,13 @@ export default function HomeLayout() {
       }}  
     />
     <Stack.Screen
-      name="ProductScreen"
+      name="ProductScreen/[productId]"
       options={{
         headerShown: false,
       }}
     />
     <Stack.Screen
-      name="CategoryScreen"
+      name="CategoryScreen/[categoryTitle]"
       options={{
         headerShown: false,
       }}

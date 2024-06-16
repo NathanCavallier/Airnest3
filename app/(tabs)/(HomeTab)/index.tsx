@@ -8,9 +8,11 @@ import Header from '@/app/Header';
 import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import CategoryScreen from './CategoryScreen';
-import { ProductScreenRouteParams, CategoryScreenRouteParams } from '../../../types'; 
-import { Link, useRoute } from '@react-navigation/native';
+import CategoryScreen from './CategoryScreen/[categoryTitle]';
+import { ProductScreenRouteParams, CategoryScreenRouteParams } from '../../../types';
+import { useRoute } from '@react-navigation/native';
+import { router, Link } from 'expo-router';
+import { title } from 'process';
 
 
 type CarouselItem = {
@@ -31,7 +33,6 @@ const defaultImage = require('@/assets/images/default.png'); // Chemin de votre 
 const Index = () => {
     const navigation = useNavigation();
     const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
-    const [productItems, setProductItems] = useState<ProductScreenProps[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
     const { isMenuVisible, closeMenu } = useMenu();
@@ -47,13 +48,14 @@ const Index = () => {
 
                 // Récupérer les produits pour le carousel
                 const featuredProducts = data
-                    .filter((product: { featured: any; }) => product.featured)
-                    .map((product: { id: any; image: any; title: any; }) => ({
-                        id: product.id,
-                        image: product.image || defaultImage,
-                        title: product.title || 'Pas de titre',
-                    }));
-                setCarouselItems(featuredProducts);
+                const fetured_products: any[] = [];
+                featuredProducts.forEach((product: any) => {
+                    if (product.featured) {
+                        fetured_products.push(product);
+                    }
+                }
+                );
+                setCarouselItems(fetured_products);
 
                 // Récupérer les catégories uniques
                 const allCategoriesTitles: any[] = [];
@@ -86,20 +88,32 @@ const Index = () => {
     }, []);
 
     const renderCarouselItem = ({ item }: { item: CarouselItem }) => (
-        <TouchableOpacity style={styles.carouselItem} onPress={() => navigation.navigate('ProductScreen', {productId: item.id})}>
+        <TouchableOpacity style={styles.carouselItem} onPress={() => {
+            router.setParams({
+                productId: item.id.toString(),
+            }); router.push('/ProductScreen/[productId]')
+        }}>
             <Image source={{ uri: item.image }} style={styles.carouselImage} />
         </TouchableOpacity>
     );
 
     const renderCategoryItem = ({ item }: { item: { id: number; image: string; title: string } }) => (
-        <TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate('CategoryScreen', { id: item.id })}>
+        <TouchableOpacity style={styles.categoryItem} onPress={() => {
+            router.setParams({
+                categoryTitle: item.title,
+            }); router.push('/CategoryScreen/[categoryId]')
+        }}>
             <Image source={{ uri: item.image }} style={styles.categoryImage} />
             <Text style={styles.categoryTitle}>{item.title}</Text>
         </TouchableOpacity>
     );
 
-    const renderProductItem = ({ item }: { item: ProductScreenProps }) => (
-        <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductScreen', { id: item.id, image: item.image, title: item.title, price: item.price })}>
+    const renderProductItem = ({ item }: { item: { id: number, image: string, title: string, price: number } }) => (
+        <TouchableOpacity style={styles.productItem} onPress={() => {
+            router.setParams({
+                productId: item.id.toString(),
+            }); router.push('/ProductScreen/[productId]')
+        }}>
             <Image source={{ uri: item.image }} style={styles.productImage} />
             <Text style={styles.productTitle}>{item.title}</Text>
             <Text style={styles.productPrice}>${item.price}</Text>

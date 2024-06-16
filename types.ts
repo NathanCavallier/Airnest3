@@ -8,4 +8,5 @@ export type ProductScreenRouteParams = {
 
 export type CategoryScreenRouteParams = {
     categoryId: string;
+    title: string;
 };

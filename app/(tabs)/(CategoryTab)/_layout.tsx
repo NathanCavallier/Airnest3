@@ -15,7 +15,7 @@ export default function SearchLayout() {
       }}  
     />
     <Stack.Screen
-      name="SelectedCategoryScreen"
+      name="[categoryTitle]"
       options={{
         headerShown: false,
       }}
