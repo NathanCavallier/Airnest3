@@ -51,11 +51,18 @@ const SelectedCategoryScreen = (props: SelectedCategoryScreenProps) => {
         fetchData();
     }, [categoryTitle]);
 
-    const renderProductItem = ({ item }: { item: { image: string; title: string; price: number; productId: number; } }) => (
+    const renderIsOutOfStock = () => {
+        return <Text style={styles.outOfStock}>Stock épuisé</Text>;
+    }
+
+    const renderProductItem = ({ item }: { item: { image: string; title: string; price: number; productId: number; stock_qty: boolean } }) => (
         <View style={styles.productItem}>
             <Image source={{ uri: item.image }} style={styles.productImage} />
-            <Text style={styles.productTitle}>{item.title}</Text>
-            <Text style={styles.productPrice}>${item.price}</Text>
+            <View style={styles.textElement}>
+                <Text style={styles.productTitle}>{item.title}</Text>
+                <Text style={styles.productPrice}>${item.price}</Text>
+                {item.stock_qty ? '' : renderIsOutOfStock()}
+            </View>
         </View>
     );
 
@@ -69,7 +76,7 @@ const SelectedCategoryScreen = (props: SelectedCategoryScreenProps) => {
             </View>
             <View>
                 <Image
-                    source={{ uri: headerImageLink || 'https://via.placeholder.com/200'}}
+                    source={{ uri: headerImageLink || 'https://via.placeholder.com/200' }}
                     style={styles.headerBackgroundImage}
                 />
             </View>
@@ -105,7 +112,7 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     productImage: {
-        width: 100,
+        width: 150,
         height: 100,
         borderRadius: 8,
     },
@@ -129,13 +136,22 @@ const styles = StyleSheet.create({
         height: 150,
         marginBottom: 10,
         borderRadius: 8,
-        
+
     },
     separator: {
         marginVertical: 6,
         height: 1,
         width: '100%',
         backgroundColor: '#CED0CEAC',
+    },
+    outOfStock: {
+        color: 'red',
+    },
+    textElement: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        marginLeft: 10,
     },
 });
 
