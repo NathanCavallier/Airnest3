@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { api } from '@/api';
-import { sep } from 'path';
-import { CategoryScreenRouteParams } from '@/types';
-import { Link } from 'expo-router';
 import { router } from 'expo-router';
-import { title } from 'process';
-import SelectedCategoryScreen from './[categoryTitle]';
 
 const defaultImage = require('@/assets/images/default.png'); // Chemin de votre image par défaut
 
@@ -18,7 +12,7 @@ type Category = {
 };
 
 const AllCategoriesScreen = () => {
-    
+
     const [categories, setCategories] = useState<Category[]>([]);
 
     useEffect(() => {
@@ -48,16 +42,18 @@ const AllCategoriesScreen = () => {
         fetchCategories();
     }, []);
 
-    const renderCategoryItem = ({ item }: { item: Category }) => (
-        <Link href={{
+    const handelPressCategory = (categoryTitle: string) => {
+        router.push({
             pathname: '/[categoryTitle]',
-            params: { categoryTitle: item.title },
-        }}>
-            <TouchableOpacity style={styles.categoryItem}>
-                <Image source={{ uri: item.image }} style={styles.categoryImage} />
-                <Text style={styles.categoryTitle}>{item.title}</Text>
-            </TouchableOpacity>
-        </Link>
+            params: { categoryTitle },
+        });
+    }
+
+    const renderCategoryItem = ({ item }: { item: Category }) => (
+        <TouchableOpacity style={styles.categoryItem} onPress={() => {handelPressCategory(item.title)}}>
+            <Image source={{ uri: item.image }} style={styles.categoryImage} />
+            <Text style={styles.categoryTitle}>{item.title}</Text>
+        </TouchableOpacity>
     );
 
     return (

@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { api } from '@/api';
 import PropTypes from 'prop-types';
-import { Link, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { CategoryScreenRouteParams } from '@/types';
 import { ProductScreenRouteParams } from '@/types';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
+import Header from '../../Header';
+import { Link, router } from 'expo-router';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -41,7 +44,6 @@ const SelectedCategoryScreen = (props: SelectedCategoryScreenProps) => {
                         setHeaderImageLink(product.category.image);
                     }
                 });
-                console.log(headerImageLink);
                 setProducts(productsList);
             } catch (error) {
                 console.error(error);
@@ -56,37 +58,46 @@ const SelectedCategoryScreen = (props: SelectedCategoryScreenProps) => {
     }
 
     const renderProductItem = ({ item }: { item: { image: string; title: string; price: number; productId: number; stock_qty: boolean } }) => (
-        <View style={styles.productItem}>
-            <Image source={{ uri: item.image }} style={styles.productImage} />
-            <View style={styles.textElement}>
-                <Text style={styles.productTitle}>{item.title}</Text>
-                <Text style={styles.productPrice}>${item.price}</Text>
-                {item.stock_qty ? '' : renderIsOutOfStock()}
+
+        <TouchableOpacity style={styles.productItem}>
+            <Link href={{
+                pathname: '/app/(tabs)/(HomeTab)/ProductScreen/[productId].tsx',
+                params: { productId: item.productId },
+            }}></Link>
+            <View style={styles.productItem}>
+                <Image source={{ uri: item.image }} style={styles.productImage} />
+                <View style={styles.textElement}>
+                    <Text style={styles.productTitle}>{item.title}</Text>
+                    <Text style={styles.productPrice}>${item.price}</Text>
+                    {item.stock_qty ? '' : renderIsOutOfStock()}
+                </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 
     return (
         <View style={styles.container}>
             <View style={styles.goBack}>
-                <Link to="/AllCategoriesScreen">
+                <TouchableOpacity onPress={navigation.goBack}>
                     <Ionicons name="arrow-back" size={24} color="orange" />
-                </Link>
+                </TouchableOpacity>
                 <View style={styles.sectionTitle}><Text>{categoryTitle}</Text></View>
             </View>
-            <View>
-                <Image
-                    source={{ uri: headerImageLink || 'https://via.placeholder.com/200' }}
-                    style={styles.headerBackgroundImage}
+            <>
+                <View>
+                    <Image
+                        source={{ uri: headerImageLink || 'https://via.placeholder.com/200' }}
+                        style={styles.headerBackgroundImage}
+                    />
+                </View>
+                <FlatList
+                    data={products}
+                    renderItem={renderProductItem}
+                    keyExtractor={(item, index) => index.toString()}
+                    numColumns={1}
+                    ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
-            </View>
-            <FlatList
-                data={products}
-                renderItem={renderProductItem}
-                keyExtractor={(item, index) => index.toString()}
-                numColumns={1}
-                ItemSeparatorComponent={() => <View style={styles.separator} />}
-            />
+            </>
         </View>
     );
 };
@@ -152,6 +163,10 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         marginLeft: 10,
+    },
+    colorOverlay: {
+        ...StyleSheet.absoluteFillObject, // Cela permet de couvrir toute l'image
+        backgroundColor: 'rgba(0,0,0,0.5)',
     },
 });
 

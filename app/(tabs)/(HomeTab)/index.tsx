@@ -4,15 +4,7 @@ import { api } from '@/api';
 import Carousel from '@/components/Carousel';
 import Menu from '@/app/Menu';
 import { MenuProvider, useMenu } from '@/contexts/MenuContext';
-import Header from '@/app/Header';
-import PropTypes from 'prop-types';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import CategoryScreen from './CategoryScreen/[categoryTitle]';
-import { ProductScreenRouteParams, CategoryScreenRouteParams } from '../../../types';
-import { useRoute } from '@react-navigation/native';
 import { router, Link } from 'expo-router';
-import { title } from 'process';
 
 
 type CarouselItem = {
@@ -31,14 +23,11 @@ type ProductScreenProps = {
 const defaultImage = require('@/assets/images/default.png'); // Chemin de votre image par défaut
 
 const Index = () => {
-    const navigation = useNavigation();
+    
     const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
     const { isMenuVisible, closeMenu } = useMenu();
-    const route = useRoute();
-    var { productId } = route.params as ProductScreenRouteParams || { productId: 0 };
-    var { categoryId } = route.params as CategoryScreenRouteParams || { categoryId: 0 };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -87,33 +76,35 @@ const Index = () => {
         fetchData();
     }, []);
 
+    const handelPressProduct = (productId: number) => {
+        router.push({
+            pathname: '/ProductScreen/[productId]',
+            params: { productId },
+        });
+    }
+
+    const handelPressCategory = (categoryTitle: string) => {
+        router.push({
+            pathname: '/CategoryScreen/[categoryTitle]',
+            params: { categoryTitle },
+        });
+    }
+
     const renderCarouselItem = ({ item }: { item: CarouselItem }) => (
-        <TouchableOpacity style={styles.carouselItem} onPress={() => {
-            router.setParams({
-                productId: item.id.toString(),
-            }); router.push('/ProductScreen/[productId]')
-        }}>
+        <TouchableOpacity style={styles.carouselItem} onPress={() => {handelPressProduct(item.id)}}>
             <Image source={{ uri: item.image }} style={styles.carouselImage} />
         </TouchableOpacity>
     );
 
     const renderCategoryItem = ({ item }: { item: { id: number; image: string; title: string } }) => (
-        <TouchableOpacity style={styles.categoryItem} onPress={() => {
-            router.setParams({
-                categoryTitle: item.title,
-            }); router.push('/CategoryScreen/[categoryId]')
-        }}>
+        <TouchableOpacity style={styles.categoryItem} onPress={() => {handelPressCategory(item.title)}}>
             <Image source={{ uri: item.image }} style={styles.categoryImage} />
             <Text style={styles.categoryTitle}>{item.title}</Text>
         </TouchableOpacity>
     );
 
     const renderProductItem = ({ item }: { item: { id: number, image: string, title: string, price: number } }) => (
-        <TouchableOpacity style={styles.productItem} onPress={() => {
-            router.setParams({
-                productId: item.id.toString(),
-            }); router.push('/ProductScreen/[productId]')
-        }}>
+        <TouchableOpacity style={styles.productItem} onPress={() => {handelPressProduct(item.id)}}>
             <Image source={{ uri: item.image }} style={styles.productImage} />
             <Text style={styles.productTitle}>{item.title}</Text>
             <Text style={styles.productPrice}>${item.price}</Text>
