@@ -20,6 +20,12 @@ export default function SearchLayout() {
         headerShown: false,
       }}
     />
+    <Stack.Screen
+      name="CategoryScreen/[productId]"
+      options={{
+        headerShown: false,
+      }}
+    />
     </Stack>
   );
 }

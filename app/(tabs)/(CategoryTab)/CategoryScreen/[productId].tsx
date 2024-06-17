@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ScrollView, Button, StyleSheet, ActivityIndicator, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { api } from '@/api';
-import { Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/build/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { Link, router } from 'expo-router';
@@ -23,11 +22,12 @@ type Product = {
     category: { id: number; title: string };
 };
 
-const ProductScreen = () => {
-    const { productId } = useLocalSearchParams() || { productId: 0 };
-    const [product, setProduct] = useState(null as Product | null);
-    const [loading, setLoading] = useState(true);
+
+const ProductScreen_Category = () => {
+    const { productId } = useLocalSearchParams() || { productId: 0};
+    const [product, setProduct] = useState<Product | null>(null);
     const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -110,7 +110,7 @@ const ProductScreen = () => {
             </View>
             <ScrollView contentContainerStyle={styles.container}>
                 <ScrollView horizontal pagingEnabled style={styles.carousel}>
-                    {product.gallery.map((image: { image: any; }, index: React.Key | null | undefined) => (
+                    {product.gallery.map((image, index) => (
                         <Image key={index} source={{ uri: image.image }} style={styles.image} />
                     ))}
                 </ScrollView>
@@ -158,7 +158,7 @@ const ProductScreen = () => {
                                 <TouchableOpacity
                                     key={index}
                                     style={styles.similarProductContainer}
-                                    onPress={() => { handelPressProduct(similarProduct.id) }}
+                                    onPress={() => {handelPressProduct(similarProduct.id)}}
                                 >
                                     <Image source={{ uri: similarProduct.image }} style={styles.similarProductImage} />
                                     <Text style={styles.similarProductTitle}>{similarProduct.title}</Text>
@@ -320,4 +320,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ProductScreen;
+export default ProductScreen_Category;

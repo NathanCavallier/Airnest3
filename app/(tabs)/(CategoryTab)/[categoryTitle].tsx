@@ -1,35 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { api } from '@/api';
-import PropTypes from 'prop-types';
-import { useRoute } from '@react-navigation/native';
-import { CategoryScreenRouteParams } from '@/types';
-import { ProductScreenRouteParams } from '@/types';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
-import Header from '../../Header';
 import { Link, router } from 'expo-router';
-import { ScrollView } from 'react-native-gesture-handler';
 
 
 
-interface SelectedCategoryScreenProps {
-    route: {
-        params: {
-            categoryTitle: string;
-        };
-    };
-}
-
-const SelectedCategoryScreen = (props: SelectedCategoryScreenProps) => {
+const SelectedCategoryScreen = () => {
 
     const navigation = useNavigation();
-    const route = useRoute();
     const { categoryTitle } = useLocalSearchParams() || { categoryTitle: 'Pas de titre' };
     const [products, setProducts] = useState<any[]>([]);
-    const params = useLocalSearchParams<{ q?: string }>();
     var [headerImageLink, setHeaderImageLink] = useState<string>('');
 
 
@@ -57,13 +40,16 @@ const SelectedCategoryScreen = (props: SelectedCategoryScreenProps) => {
         return <Text style={styles.outOfStock}>Stock épuisé</Text>;
     }
 
-    const renderProductItem = ({ item }: { item: { image: string; title: string; price: number; productId: number; stock_qty: boolean } }) => (
+    const handelPressProduct = (productId: number) => {
+        router.push({
+            pathname: '/CategoryScreen/[productId]',
+            params: { productId },
+        });
+    }
 
-        <TouchableOpacity style={styles.productItem}>
-            <Link href={{
-                pathname: '/app/(tabs)/(HomeTab)/ProductScreen/[productId].tsx',
-                params: { productId: item.productId },
-            }}></Link>
+    const renderProductItem = ({ item }: { item: { image: string; title: string; price: number; id: number; stock_qty: boolean } }) => (
+
+        <TouchableOpacity style={styles.productItem} onPress={() => {handelPressProduct(item.id)}}>
             <View style={styles.productItem}>
                 <Image source={{ uri: item.image }} style={styles.productImage} />
                 <View style={styles.textElement}>

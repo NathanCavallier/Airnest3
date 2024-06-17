@@ -23,7 +23,7 @@ type ProductScreenProps = {
 const defaultImage = require('@/assets/images/default.png'); // Chemin de votre image par défaut
 
 const Index = () => {
-    
+
     const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
@@ -36,11 +36,14 @@ const Index = () => {
                 const data = response.data || [];
 
                 // Récupérer les produits pour le carousel
-                const featuredProducts = data
                 const fetured_products: any[] = [];
-                featuredProducts.forEach((product: any) => {
+                data.forEach((product: any) => {
                     if (product.featured) {
-                        fetured_products.push(product);
+                        fetured_products.push({
+                            id: product.id,
+                            image: product.image || defaultImage,
+                            title: product.title || 'Pas de titre',
+                        });
                     }
                 }
                 );
@@ -91,20 +94,20 @@ const Index = () => {
     }
 
     const renderCarouselItem = ({ item }: { item: CarouselItem }) => (
-        <TouchableOpacity style={styles.carouselItem} onPress={() => {handelPressProduct(item.id)}}>
+        <TouchableOpacity style={styles.carouselItem} onPress={() => { handelPressProduct(item.id) }}>
             <Image source={{ uri: item.image }} style={styles.carouselImage} />
         </TouchableOpacity>
     );
 
     const renderCategoryItem = ({ item }: { item: { id: number; image: string; title: string } }) => (
-        <TouchableOpacity style={styles.categoryItem} onPress={() => {handelPressCategory(item.title)}}>
+        <TouchableOpacity style={styles.categoryItem} onPress={() => { handelPressCategory(item.title) }}>
             <Image source={{ uri: item.image }} style={styles.categoryImage} />
             <Text style={styles.categoryTitle}>{item.title}</Text>
         </TouchableOpacity>
     );
 
     const renderProductItem = ({ item }: { item: { id: number, image: string, title: string, price: number } }) => (
-        <TouchableOpacity style={styles.productItem} onPress={() => {handelPressProduct(item.id)}}>
+        <TouchableOpacity style={styles.productItem} onPress={() => { handelPressProduct(item.id) }}>
             <Image source={{ uri: item.image }} style={styles.productImage} />
             <Text style={styles.productTitle}>{item.title}</Text>
             <Text style={styles.productPrice}>${item.price}</Text>
