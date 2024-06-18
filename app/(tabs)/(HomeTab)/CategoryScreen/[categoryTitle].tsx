@@ -100,11 +100,10 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     sectionTitle: {
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: 'bold',
         alignItems: 'center',
-        marginVertical: 10,
-        color: 'gray',
+        color: 'orange',
     },
     productItem: {
         flex: 1,

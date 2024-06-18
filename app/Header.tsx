@@ -9,6 +9,7 @@ import CartScreen from './(tabs)/(CartTab)/CartScreen';
 import AccountScreen from './(tabs)/(AccountTab)/AccountScreen';
 import { MenuContext } from '@/contexts/MenuContext';
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 
 
@@ -16,9 +17,20 @@ export default function Header() {
   const { openMenu } = useContext(MenuContext) || {};
   const navigation = useNavigation();
   const [isMenu, setIsMenu] = useState(false);
+  const [isSearch, setIsSearch] = useState(true);
+
+  var routes = navigation.getParent();
 
   // Code pour ouvrir la recherche
   const openSearch = () => {
+    if (isSearch) {
+      router.push('SearchScreen');
+      router.canGoBack();
+      setIsSearch(false);
+    } else if(router.canGoBack()) {
+      router.back();
+      setIsSearch(true);
+    }
   };
 
   // Code pour ouvrir le panier
@@ -40,15 +52,12 @@ export default function Header() {
         <TouchableOpacity onPress={() => { /* code pour ouvrir le menu */ }}>
           <Image source={require('@/assets/images/Logo_airneis_store.jpeg')} style={{ width: 100, height: 40 }} />
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 120 }}>
-          <TouchableOpacity onPress={() => { openSearch }}>
-            <Ionicons name="search" size={24} color="gray" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => { /* code pour ouvrir le panier */ }}>
-            <Ionicons name="cart" size={24} color="gray" />
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: 120 }}>
+          <TouchableOpacity onPress={() => { openSearch() }} style={{ marginRight: 15 }}>
+            <Ionicons name="search" size={23} color="gray" />
           </TouchableOpacity>
           <TouchableOpacity onPressIn={switchMenuIcon}>
-            {isMenu ? <Ionicons name="close" size={25} color="orange" /> : <Ionicons name="menu" size={24} color="gray" />}
+            {isMenu ? <Ionicons name="close" size={28} color="orange" /> : <Ionicons name="menu" size={28} color="gray" />}
           </TouchableOpacity>
         </View>
       </View>

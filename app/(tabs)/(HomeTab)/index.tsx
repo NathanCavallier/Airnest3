@@ -13,13 +13,6 @@ type CarouselItem = {
     title: string;
 };
 
-type ProductScreenProps = {
-    id: number;
-    image: string;
-    title: string;
-    price: number;
-};
-
 const defaultImage = require('@/assets/images/default.png'); // Chemin de votre image par défaut
 
 const Index = () => {
@@ -88,7 +81,7 @@ const Index = () => {
 
     const handelPressCategory = (categoryTitle: string) => {
         router.push({
-            pathname: '/CategoryScreen/[categoryTitle]',
+            pathname: '/(tabs)/(HomeTab)/CategoryScreen/[categoryTitle]',
             params: { categoryTitle },
         });
     }

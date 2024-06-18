@@ -76,7 +76,7 @@ const ProductScreen = () => {
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color="orange" />
             </View>
         );
     }
@@ -95,7 +95,7 @@ const ProductScreen = () => {
 
     const handelPressProduct = (productId: number) => {
         router.push({
-            pathname: '/ProductScreen_Category/[productId_category]',
+            pathname: '/ProductScreen/[productId_category]',
             params: { productId_category: productId },
         });
     }
@@ -106,7 +106,7 @@ const ProductScreen = () => {
                 <TouchableOpacity onPress={navigation.goBack}>
                     <Ionicons name="arrow-back" size={24} color="orange" />
                 </TouchableOpacity>
-                <View style={styles.sectionTitle}><Text>{product.title}</Text></View>
+                <View><Text style={styles.section_Title}>{product.title}</Text></View>
             </View>
             <ScrollView contentContainerStyle={styles.container}>
                 <ScrollView horizontal pagingEnabled style={styles.carousel}>
@@ -121,12 +121,7 @@ const ProductScreen = () => {
                     {product.old_price > product.price && (
                         <Text style={styles.oldPrice}>Avant réduction: ${product.old_price}</Text>
                     )}
-                    <Text style={styles.shipping}>Livraison: ${product.shipping_amount}</Text>
-                    {product.in_stock ? (
-                        <TouchableOpacity onPress={() => { handelAddToCart() }} style={styles.button}><Text>Ajouter au panier</Text></TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity disabled ><Text style={styles.outOfStock}>Stock épuisé</Text></TouchableOpacity>
-                    )}
+                <Text style={styles.shipping}>Livraison: ${product.shipping_amount}</Text>
                 </View>
 
                 <View style={styles.specifications}>
@@ -149,6 +144,12 @@ const ProductScreen = () => {
                         <Text key={index} style={styles.sizeText}>Longeur: {size.length}m, Largeur: {size.width}m</Text>
                     ))) : (<Text> --- </Text>)}
                 </View>
+
+                {product.in_stock ? (
+                    <TouchableOpacity onPress={() => { handelAddToCart() }} style={styles.button}><Text>Ajouter au panier</Text></TouchableOpacity>
+                ) : (
+                    <TouchableOpacity disabled ><Text style={styles.outOfStock}>Stock épuisé</Text></TouchableOpacity>
+                )}
 
                 {similarProducts.length > 0 && (
                     <View style={styles.similarProducts}>
@@ -249,6 +250,12 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         color: 'black',
     },
+    section_Title: {
+        fontSize: 18,
+        fontWeight: 'light',
+        marginVertical: 8,
+        color: 'orange',
+    },
     sectionTitleSimilar: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -278,13 +285,12 @@ const styles = StyleSheet.create({
     outOfStock: {
         flex: 1,
         color: 'red',
-        width: '50%',
+        width: '30%',
         margin: 16,
         borderRadius: 8,
         borderWidth: 1,
         borderColor: 'red',
         padding: 16,
-        alignItems: 'center',
     },
     goBack: {
         flexDirection: 'row',
