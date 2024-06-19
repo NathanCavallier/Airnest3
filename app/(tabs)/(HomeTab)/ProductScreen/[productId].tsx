@@ -89,8 +89,38 @@ const ProductScreen = () => {
         );
     }
 
+    const createOrder = async (productId: number, quantity: number = 1) => {
+        const url = 'http://localhost:8000/api/v1/create-order/';
+        const orderData = {
+          productId: productId,
+          quantity: quantity,
+          // Ajoutez d'autres champs nécessaires selon votre API
+        };
+      
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              // Incluez d'autres en-têtes si nécessaire, comme un token d'authentification
+            },
+            body: JSON.stringify(orderData),
+          });
+      
+          if (!response.ok) {
+            throw new Error('Failed to create order');
+          }
+      
+          const data = await response.json();
+          console.log('Order created successfully:', data);
+          // Traitez ici la réponse, par exemple en mettant à jour l'état de l'application
+        } catch (error) {
+          console.error('Error creating order:', error);
+        }
+      };
+
     const handelAddToCart = () => {
-        // Add to cart logic
+        createOrder(product.id);
     }
 
     const handelPressProduct = (productId: number) => {
