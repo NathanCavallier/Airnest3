@@ -30,24 +30,8 @@ export default function Header() {
     }
   };
 
-  // Code pour ouvrir le panier
-  const openCart = () => {
-  };
-
-  // Code pour ouvrir le compte
-  const openAccount = () => {
-  };
-
   function switchMenuIcon() {
     setIsMenu(!isMenu);
-    
-  }
-
-  function switchSearchIcon(is_search: boolean) {
-    setIsSearch(is_search);
-    if(isSearch) {
-      setIsMenu(false);
-    }
   }
 
   return (

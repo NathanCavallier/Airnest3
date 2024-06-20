@@ -5,11 +5,56 @@ import axios from 'axios';
 import { api } from '@/api';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams } from 'expo-router';
+
+
+type Filter = {
+    minPrice: string;
+    maxPrice: string;
+    materials: string[];
+    inStock: boolean;
+    categories: string[];
+};
+
+type Product = {
+    id: number;
+    title: string;
+    image: string;
+    description: string;
+    price: number;
+    old_price: number;
+    shipping_amount: number;
+    in_stock: boolean;
+    gallery: { image: string }[];
+    specification: { title: string; content: string }[];
+    color: { name: string }[];
+    size: { length: number; width: number }[];
+    category: { id: number; title: string };
+};
 
 const SearchScreen = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOption, setSortOption] = useState('price_asc');
-    const [results, setResults] = useState<{ id: number; title: string; price: number; image: string }[]>([]);
+    const [results, setResults] = useState<Product[]>([]);
+    const { filters } = useLocalSearchParams() as { filters: string } || {};
+    let filter: Filter = { minPrice: '', maxPrice: '', materials: [], inStock: false, categories: [] };
+    if (filters) {
+        filter = JSON.parse(filters) as Filter;
+    }
+    let [material, setMaterial] = useState(filter.materials);
+    let [category, setCategory] = useState(filter.categories);
+    let [minPrice, setMinPrice] = useState(filter.minPrice);
+    let [maxPrice, setMaxPrice] = useState(filter.maxPrice);
+    let [inStock, setInStock] = useState(filter.inStock);
+    console.log('material: ', material);
+    console.log('category: ', category);
+    console.log('minPrice: ', minPrice);
+    console.log('maxPrice: ', maxPrice);
+    console.log('inStock: ', inStock);
+
+    const [displayClearButton, setDisplayClearButton] = useState(false); // Pour afficher ou non le bouton d'annulation
+    const [skipFilter, setSkipFilter] = useState(false); // Pour éviter de filtrer les résultats lors de l'initialisation
+    const [displyItems, setDisplayItems] = useState(false);
 
     useEffect(() => {
         fetchResults();
@@ -23,6 +68,7 @@ const SearchScreen = () => {
                     sort: sortOption
                 }
             });
+            setDisplayClearButton(false);
             let sortedData = response.data;
             // Tri côté client, si nécessaire
             if (sortOption === 'price_asc') {
@@ -32,29 +78,120 @@ const SearchScreen = () => {
                 sortedData.sort((a: { price: number; }, b: { price: number; }) => b.price - a.price);
                 setResults(sortedData);
             }
-            let sortedDtaWithTitles = response.data;
             if (searchQuery) {
-                sortedDtaWithTitles = response.data.filter((item: { title: string; }) => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
-                setResults(sortedDtaWithTitles);
+                sortedData = response.data.filter((item: { title: string; }) => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
+                setResults(sortedData);
+                setDisplayClearButton(true);
+            }
+            if (!skipFilter) {
+                // Filtrage : si des filtres sont appliqués, les appliquer
+                if (material.length > 0) {
+                    if (!displayClearButton) {
+                        setDisplayClearButton(true);
+                    }
+                    let sortedByMaterial: any[] = [];
+                    material.forEach((material: string) => {
+                        sortedData.forEach((element: Product) => {
+                            let spec = element.specification;
+                            spec.map((item) => {
+                                if (item.title === 'Material' && item.content === material) {
+                                    sortedByMaterial.push(element);
+                                }
+                            }
+                            );
+                        });
+                    }
+                    );
+                    setResults(sortedByMaterial);
+                }
+                if (category.length > 0) {
+                    if (!displayClearButton) {
+                        setDisplayClearButton(true);
+                    }
+                    let sortedByCategory: any[] = [];
+                    let tampon = results ? sortedData : results;
+                    category.forEach(cat => {
+                        tampon.forEach((element: Product) => {
+                            if (element.category.title === cat) {
+                                sortedByCategory.push(element);
+                            }
+                        }
+                    );
+                    });
+                    setResults(sortedByCategory);
+                    console.log('tampon: ', tampon);
+                    console.log('sortedByCategory: ', sortedByCategory);
+                }
+                if (minPrice && maxPrice) {
+                    if (!displayClearButton) {
+                        setDisplayClearButton(true);
+                    }
+                    sortedData = sortedData.filter((item: { price: number; }) => item.price >= parseInt(minPrice) && item.price <= parseInt(maxPrice));
+                    setResults(sortedData);
+                }
+                if (inStock) {
+                    if (!displayClearButton) {
+                        setDisplayClearButton(true);
+                    }
+                    sortedData = sortedData.filter((item: { inStock: boolean; }) => item.inStock);
+                    setResults(sortedData);
+                }
             }
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleSearchChange = (text: React.SetStateAction<string>) => { setSearchQuery(text);};
+    function DisplayClearButton() {
+        if (displayClearButton) {
+            return (
+                <TouchableOpacity
+                    style={styles.filterButton}
+                    onPress={() => {
+                        setMaterial([]);
+                        setCategory([]);
+                        setMinPrice('');
+                        setMaxPrice('');
+                        setInStock(false);
+                        setSkipFilter(true);
+                        setDisplayItems(true);
+                        setDisplayClearButton(false);
+                    }}
+                >
+                    <Text>Annuler</Text>
+                </TouchableOpacity>
+            );
+        } else if(displyItems) {
+            return (
+                <TouchableOpacity
+                    style={styles.filterButton}
+                    onPress={() => {
+                        fetchResults();
+                        setDisplayItems(false);
+                    }}
+                >
+                    <Text>Afficher tout</Text>
+                </TouchableOpacity>
+            );
+        }
+    }
+
+    const handleSearchChange = (text: React.SetStateAction<string>) => { setSearchQuery(text); };
     const handleSortChange = (value: React.SetStateAction<string>) => setSortOption(value);
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerText}>Rechercher</Text>
-                <TouchableOpacity
-                    style={styles.filterButton}
-                    onPress={() => router.push('/FilterScreen')}
-                >
-                    <Ionicons name="filter" size={20} color="gray"></Ionicons>
-                </TouchableOpacity>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <TouchableOpacity
+                        style={styles.filterButton}
+                        onPress={() => { setSkipFilter(false); router.push('/FilterScreen') }}
+                    >
+                        <Ionicons name="filter" size={20} color="gray"></Ionicons>
+                    </TouchableOpacity>
+                    {DisplayClearButton()}
+                </View>
             </View>
             <TextInput
                 style={styles.searchInput}
@@ -77,7 +214,7 @@ const SearchScreen = () => {
             </View>
             <FlatList
                 data={results}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.id.toString() + Math.random()}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         onPress={() => router.push({
@@ -115,14 +252,16 @@ const styles = StyleSheet.create({
     filterButton: {
         padding: 10,
         backgroundColor: '#ddd',
-        borderRadius: 5
+        borderRadius: 5,
+        marginRight: 5
     },
     searchInput: {
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
         marginBottom: 16,
-        paddingHorizontal: 8
+        paddingHorizontal: 8,
+        borderRadius: 8
     },
     sortContainer: {
         flexDirection: 'row',
