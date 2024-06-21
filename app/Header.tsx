@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 import { ThemedView } from '../components/ThemedView';
 import { MenuContext } from '@/contexts/MenuContext';
 import { useNavigation } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { router, useRouter, useLocalSearchParams } from 'expo-router';
 
 
 
@@ -32,6 +32,9 @@ export default function Header() {
 
   function switchMenuIcon() {
     setIsMenu(!isMenu);
+    if (isMenu) {
+      openMenu();
+    }
   }
 
   return (
