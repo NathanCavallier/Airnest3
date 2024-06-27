@@ -10,9 +10,9 @@ import 'react-native-safe-area-context';
 import 'react-native-screens';
 import Header from '@/app/Header';
 import { MenuProvider } from '@/contexts/MenuContext';
-
-
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useNavigation } from '@react-navigation/native';
+
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -22,8 +22,12 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigation = useNavigation();
+  const state = navigation.getState();
+  const currentRouteName = state?.routes[state.index].name ?? '';
+  const hideHeaderRoutes = ['LoginScreen', 'RegisterScreen', 'ForgotPasswordScreen', 'ResetPasswordScreen'];
+  const shouldShowHeader = !hideHeaderRoutes.includes(currentRouteName);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -46,12 +50,19 @@ export default function RootLayout() {
   return (
     <MenuProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Header />
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false}} />
-          <Stack.Screen name="MenuScreen" options={{ title: "Menu", headerShown: false }} initialParams={{ isLoggedIn, onLogin: handleLogin, onLogout: handleLogout }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+          {shouldShowHeader ?? <Header
+            isLoggedIn={isLoggedIn}
+          />}
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="MenuScreen" options={{ title: "Menu", headerShown: false }} initialParams={{ isLoggedIn }} />
+            <Stack.Screen name="Menu" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+            <Stack.Screen name="LoginScreen" options={{ title: "Connexion", headerShown: false }} />
+            <Stack.Screen name="RegisterScreen" options={{ title: "Inscription", headerShown: false }} />
+            <Stack.Screen name="ForgotPasswordScreen" options={{ title: "Mot de passe oublié", headerShown: false }} />
+            <Stack.Screen name="ResetPasswordScreen" options={{ title: "Réinitialiser le mot de passe", headerShown: false }} />
+          </Stack>
       </ThemeProvider>
     </MenuProvider>
   );

@@ -1,9 +1,8 @@
-// screens/LoginScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 
-const LoginScreen = () => {
-    const [email, setEmail] = useState('');
+const LoginScreen = ({ navigation }) => {
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
@@ -13,41 +12,50 @@ const LoginScreen = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ username, password }),
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to login');
+            if (response.ok) {
+                const data = await response.json();
+                // Store the token (for example in AsyncStorage)
+                Alert.alert('Success', 'Login successful');
+                navigation.navigate('AccountScreen', { userId: data.user_id });
+            } else {
+                const data = await response.json();
+                Alert.alert('Error', data.message || 'Login failed');
             }
-
-            const data = await response.json();
-            console.log('User logged in successfully:', data);
         } catch (error) {
-            console.error('Error logging in user:', error);
+            console.log('Error', error);
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text>Email</Text>
-            <TextInput value={email} onChangeText={setEmail} style={styles.input} />
-            <Text>Mot de passe</Text>
-            <TextInput value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
-            <Button title="Se connecter" onPress={handleLogin} />
+            <Text style={styles.header}>Login</Text>
+            <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
+            <TextInput placeholder="Password" value={password} onChangeText={setPassword} style={styles.input} secureTextEntry />
+            <Button title="Login" onPress={handleLogin} />
+            <Button title="Forgot Password?" onPress={() => navigation.navigate('ForgotPasswordScreen')} />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         padding: 20,
+    },
+    header: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
     },
     input: {
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
-        marginBottom: 12,
-        paddingHorizontal: 10,
+        marginBottom: 20,
+        padding: 10,
     },
 });
 

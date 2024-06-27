@@ -13,6 +13,24 @@ export default function AccountLayout() {
         headerShown: false, 
       }}  
     />
+    <Stack.Screen
+      name="about"
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="contact"
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="cgu"
+      options={{
+        headerShown: false,
+      }}
+    />
     </Stack>
   );
 }

@@ -119,8 +119,6 @@ const SearchScreen = () => {
                     );
                     });
                     setResults(sortedByCategory);
-                    console.log('tampon: ', tampon);
-                    console.log('sortedByCategory: ', sortedByCategory);
                 }
                 if (minPrice && maxPrice) {
                     if (!displayClearButton) {

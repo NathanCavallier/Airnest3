@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
 
 const { width } = Dimensions.get('window');
 
@@ -23,24 +23,28 @@ const Menu = ({ isVisible, onClose }: { isVisible: boolean; onClose: () => void 
   }, [isVisible]);
 
   return (
-    <PanGestureHandler onGestureEvent={(event) => {
-      if (event.nativeEvent.translationX > 50) {
-        onClose();
-      }
-    }}>
-      <Animated.View style={[styles.container, animatedStyle]}>
-        <View style={styles.menuHeader}>
-          <TouchableOpacity onPress={onClose}>
-            <Text style={styles.closeButton}>Close</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.menuContent}>
-          <Text style={styles.menuItem}>Item 1</Text>
-          <Text style={styles.menuItem}>Item 2</Text>
-          <Text style={styles.menuItem}>Item 3</Text>
-        </View>
-      </Animated.View>
-    </PanGestureHandler>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <PanGestureHandler onGestureEvent={(event) => {
+          if (event.nativeEvent.translationX > 50) {
+            onClose();
+          }
+        }}>
+          <Animated.View style={[styles.container, animatedStyle]}>
+            <View style={styles.menuHeader}>
+              <TouchableOpacity onPress={onClose}>
+                <Text style={styles.closeButton}>Close</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.menuContent}>
+              <Text style={styles.menuItem}>Item 1</Text>
+              <Text style={styles.menuItem}>Item 2</Text>
+              <Text style={styles.menuItem}>Item 3</Text>
+            </View>
+          </Animated.View>
+        </PanGestureHandler>
+      </View>
+    </GestureHandlerRootView>
   );
 };
 

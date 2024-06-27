@@ -1,9 +1,10 @@
-// screens/RegisterScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { useFonts } from 'expo-font';
+import { router } from 'expo-router';
 
-const RegisterScreen = () => {
-    const [fullName, setFullName] = useState('');
+const RegisterScreen = ({ navigation }: { navigation: any }) => {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -14,43 +15,49 @@ const RegisterScreen = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ full_name: fullName, email, password }),
+                body: JSON.stringify({ username, email, password }),
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to register');
+            if (response.ok) {
+                Alert.alert('Success', 'Registration successful');
+                router.navigate('LoginScreen');
+            } else {
+                const data = await response.json();
+                console.log('Error', data.message || 'Registration failed');
             }
-
-            const data = await response.json();
-            console.log('User registered successfully:', data);
         } catch (error) {
-            console.error('Error registering user:', error);
+            console.log('Error', error);
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text>Nom complet</Text>
-            <TextInput value={fullName} onChangeText={setFullName} style={styles.input} />
-            <Text>Email</Text>
-            <TextInput value={email} onChangeText={setEmail} style={styles.input} />
-            <Text>Mot de passe</Text>
-            <TextInput value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
-            <Button title="S'inscrire" onPress={handleRegister} />
+            <Text style={styles.header}>Register</Text>
+            <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
+            <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} />
+            <TextInput placeholder="Password" value={password} onChangeText={setPassword} style={styles.input} secureTextEntry />
+            <Button title="Register" onPress={handleRegister} />
+            <Button title='Se connecter' onPress={() => router.push('LoginScreen')}/>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         padding: 20,
+    },
+    header: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
     },
     input: {
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
-        marginBottom: 12,
-        paddingHorizontal: 10,
+        marginBottom: 20,
+        padding: 10,
     },
 });
 
