@@ -25,7 +25,7 @@ export default function RootLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigation = useNavigation();
   const state = navigation.getState();
-  const currentRouteName = state?.routes[state.index].name ?? '';
+  const currentRouteName = state?.routes[state.index]?.name ?? '';
   const hideHeaderRoutes = ['LoginScreen', 'RegisterScreen', 'ForgotPasswordScreen', 'ResetPasswordScreen'];
   const shouldShowHeader = !hideHeaderRoutes.includes(currentRouteName);
 
@@ -50,9 +50,9 @@ export default function RootLayout() {
   return (
     <MenuProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          {shouldShowHeader ?? <Header
+          <Header
             isLoggedIn={isLoggedIn}
-          />}
+          />
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="MenuScreen" options={{ title: "Menu", headerShown: false }} initialParams={{ isLoggedIn }} />

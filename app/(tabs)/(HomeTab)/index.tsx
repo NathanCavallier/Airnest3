@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { api } from '@/api';
 import Carousel from '@/components/Carousel';
 import Menu from '@/app/Menu';
@@ -21,6 +21,7 @@ const Index = () => {
     const [categories, setCategories] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
     const { isMenuVisible, closeMenu } = useMenu();
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -64,6 +65,7 @@ const Index = () => {
                     title: product.title || 'Pas de titre',
                     price: product.price || 0,
                 })));
+                setIsLoading(false);
             } catch (error) {
                 console.error(error);
             }
@@ -71,6 +73,10 @@ const Index = () => {
 
         fetchData();
     }, []);
+
+    if (isLoading) {
+        return <ActivityIndicator size="large" color="orange" />;
+    }
 
     const handelPressProduct = (productId: number) => {
         router.push({
