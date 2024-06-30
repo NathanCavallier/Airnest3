@@ -58,10 +58,6 @@ export default function RootLayout() {
             <Stack.Screen name="MenuScreen" options={{ title: "Menu", headerShown: false }} initialParams={{ isLoggedIn }} />
             <Stack.Screen name="Menu" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
-            <Stack.Screen name="LoginScreen" options={{ title: "Connexion", headerShown: false }} />
-            <Stack.Screen name="RegisterScreen" options={{ title: "Inscription", headerShown: false }} />
-            <Stack.Screen name="ForgotPasswordScreen" options={{ title: "Mot de passe oublié", headerShown: false }} />
-            <Stack.Screen name="ResetPasswordScreen" options={{ title: "Réinitialiser le mot de passe", headerShown: false }} />
           </Stack>
       </ThemeProvider>
     </MenuProvider>

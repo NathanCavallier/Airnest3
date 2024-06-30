@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type { TextProps, GestureResponderEvent } from 'react-native';
 
 export namespace ExpoRouter {
-  type StaticRoutes = `/` | `/(AccountTab)` | `/(CartTab)` | `/(CategoryTab)` | `/(HomeTab)` | `/(tabs)` | `/AccountScreen` | `/AccountSettingsScreen` | `/AllCategoriesScreen` | `/CartScreen` | `/EditAccountScreen` | `/FilterScreen` | `/ForgotPasswordScreen` | `/Header` | `/LoginScreen` | `/Menu` | `/MenuScreen` | `/RegisterScreen` | `/ResetPasswordScreen` | `/SearchScreen` | `/_sitemap` | `/about` | `/cgu` | `/contact` | `/explore` | `/legal`;
+  type StaticRoutes = `/` | `/(AccountTab)` | `/(CartTab)` | `/(CategoryTab)` | `/(HomeTab)` | `/(tabs)` | `/About` | `/AccountScreen` | `/AccountSettingsScreen` | `/AllCategoriesScreen` | `/CartScreen` | `/Cgu` | `/Contact` | `/EditAccountScreen` | `/FilterScreen` | `/ForgotPasswordScreen` | `/Header` | `/Legal` | `/LoginScreen` | `/Menu` | `/MenuScreen` | `/RegisterScreen` | `/ResetPasswordScreen` | `/SearchScreen` | `/_sitemap` | `/explore`;
   type DynamicRoutes<T extends string> = `/${SingleRoutePart<T>}` | `/CategoryScreen/${SingleRoutePart<T>}` | `/ProductScreen/${SingleRoutePart<T>}`;
   type DynamicRouteTemplate = `/CategoryScreen/[categoryTitle]` | `/CategoryScreen/[productId]` | `/ProductScreen/[productId]` | `/[categoryTitle]`;
 

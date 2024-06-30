@@ -32,19 +32,25 @@ export default function AccountLayout() {
         }}
       />
       <Stack.Screen
-        name="about"
+        name="About"
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="contact"
+        name="Contact"
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="cgu"
+        name="Cgu"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Legal"
         options={{
           headerShown: false,
         }}

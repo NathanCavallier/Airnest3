@@ -15,23 +15,21 @@ const Header = (isLoggedIn: {isLoggedIn: boolean}) => {
   const [isSearch, setIsSearch] = useState(true);
   const state = navigation.getState();
   const currentRoute = state?.routes[state.index] || { name: 'HomeScreen'};
-  const [search, setSearch] = useState(true); // Variable pour désactiver le bouton de recherche
+  const [search, setSearch] = useState(false); // Variable pour désactiver le bouton de recherche
   const [searchOpacity, setSearchOpacity] = useState(1); // Variable pour gérer l'opacité du bouton de recherche
   const [menu, setMenu] = useState(false); // Variable pour désactiver le bouton de menu
   const [menuOpacity, setMenuOpacity] = useState(1); // Variable pour gérer l'opacité du bouton de menu
 
   // Code pour ouvrir la recherche
   const openSearch = () => {
+    setIsSearch(!isSearch);
     if (isSearch) {
       setMenuOpacity(0.5); // Diminuer l'opacité du bouton de menu
       setMenu(true); // Désactiver le bouton de menu
       router.push('SearchScreen');
-      router.canGoBack();
-      setIsSearch(false);
     } else if(router.canGoBack()) {
       setMenuOpacity(1); // Rétablir l'opacité du bouton de menu
       setMenu(false); // Réactiver le bouton de menu
-      setIsSearch(true); 
       router.push('/');
     }
   };
