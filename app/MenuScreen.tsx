@@ -19,21 +19,21 @@ const MenuScreen: React.FC = () => {
             {isLoggedIn ? (
                 <>
                     <Text style={styles.menuItem} onPress={() => router.push('/AccountScreen')}>Mon compte</Text>
-                    <Text style={styles.menuItem} onPress={() => router.push('orders')}>Mes commandes</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/Orders')}>Mes commandes</Text>
                     <Text style={styles.menuItem} onPress={() => router.push('/Cgu')}>CGU</Text>
-                    <Text style={styles.menuItem} onPress={() => router.push('legal')}>Mentions légales</Text>
-                    <Text style={styles.menuItem} onPress={() => router.push('contact')}>Contact</Text>
-                    <Text style={styles.menuItem} onPress={() => router.push('about')}>À propos d’ÀIRNEIS</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/Legal')}>Mentions légales</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/Contact')}>Contact</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/About')}>À propos d’ÀIRNEIS</Text>
                     <Button title="Se déconnecter" onPress={onLogout} />
                 </>
             ) : (
                 <>
                     <Button title="Se connecter" onPress={onLogin} />
-                    <Text style={styles.menuItem} onPress={() => router.push('RegisterScreen')}>S’inscrire</Text>
-                    <Text style={styles.menuItem} onPress={() => router.push('cgu')}>CGU</Text>
-                    <Text style={styles.menuItem} onPress={() => router.push('legal')}>Mentions légales</Text>
-                    <Text style={styles.menuItem} onPress={() => router.push('contact')}>Contact</Text>
-                    <Text style={styles.menuItem} onPress={() => router.push('about')}>À propos d’ÀIRNEIS</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/RegisterScreen')}>S’inscrire</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/Cgu')}>CGU</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/Legal')}>Mentions légales</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/Contact')}>Contact</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/About')}>À propos d’ÀIRNEIS</Text>
                 </>
             )}
         </View>
@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     menuItem: {
         fontSize: 18,
         marginVertical: 10,
-        color: 'gray',
     },
 });
 

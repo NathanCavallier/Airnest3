@@ -13,9 +13,9 @@ type Category = {
 };
 
 const AllCategoriesScreen = () => {
+    
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(false);
-
 
     if (loading) {
         return (

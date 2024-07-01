@@ -154,15 +154,42 @@ const AccountScreen = ({ route }: { route: any }) => {
       <TouchableOpacity style={styles.button} onPress={handleSaveChanges}>
         <Text style={{ color: 'black' }}>Enregistrer les modifications</Text>
       </TouchableOpacity>
+      <View style={styles.section}>
+        <Button title="Mes commandes" onPress={() => router.push('/(tabs)/(AccountTab)/Orders')} />
+        <Button title="Se déconnecter" onPress={() => router.push('app/(tabs)/(HomeTab)/index')} />
+        <Button title="CGU" onPress={() => router.push('/(tabs)/(AccountTab)/Cgu')} />
+        <Button title="Mentions légales" onPress={() => router.push('/(tabs)/(AccountTab)/Legal')} />
+        <Button title="Contact" onPress={() => router.push('/(tabs)/(AccountTab)/Contact')} />
+        <Button title="À propos d’ÀIRNEIS" onPress={() => router.push('/(tabs)/(AccountTab)/About')} />
+        <Button title="Supprimer le compte" onPress={() => Alert.alert('Supprimer le compte', 'Êtes-vous sûr de vouloir supprimer votre compte ?', [
+          {
+            text: 'Annuler',
+            style: 'cancel',
+          },
+          {
+            text: 'Supprimer',
+            onPress: () => {
+              api.delete(`http://localhost:8000/api/v1/user/profile/${1}/`)
+                .then(() => {
+                  alert('Compte supprimé avec succès');
+                  router.push('app/(tabs)/(HomeTab)/index');
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+            },
+          },
+        ])} />
+      </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexGrow: 1,
     padding: 20,
+    backgroundColor: 'white',
   },
   header: {
     fontSize: 24,
@@ -197,6 +224,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
     borderRadius: 8,
     padding: 10,
+    marginBottom: 20,
     color: 'white',
   },
 });
