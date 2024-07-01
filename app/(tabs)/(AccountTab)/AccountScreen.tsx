@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Alert, ScrollView, Image, TextInput, Button } from 'react-native';
 import { useFonts } from 'expo-font';
 import { router, useLocalSearchParams } from 'expo-router';
+import { api } from '@/api';
 
 type Profile = {
+    image: string | undefined;
     username: string;
     email: string;
     full_name: string;
@@ -13,61 +15,180 @@ type Profile = {
 };
 
 const AccountScreen = ({ route }: { route: any }) => {
-    const [profile, setProfile] = useState(null as unknown as Profile);
-    const [loading, setLoading] = useState(true);
-    const { userId } = useLocalSearchParams();
+  const { userId } = useLocalSearchParams as unknown as { userId: string };
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [gender, setGender] = useState('');
+  const [about, setAbout] = useState('');
+  const [methodsOfPayment, setMethodsOfPayment] = useState<string[]>([]);
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const response = await fetch(`http://localhost:8000/api/v1/user/profile/${userId}/`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setProfile(data);
-                } else {
-                    router.push('RegisterScreen')
-                }
-            } catch (error) {
-                console.log('Error', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    api.get(`http://localhost:8000/api/v1/user/profile/${1}/`)
+      .then(response => {
+        setProfile(response.data);
+        setFullName(response.data.full_name);
+        setEmail(response.data.user.email);
+        setAddress(response.data.address);
+        setCity(response.data.city);
+        setState(response.data.state);
+        setCountry(response.data.country);
+        setGender(response.data.gender);
+        setAbout(response.data.about);
+        // Ajoutez d'autres champs si nécessaire
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, [userId]);
 
-        fetchProfile();
-    }, [userId]);
-
-    if (loading) {
-        return <ActivityIndicator size="large" color="orange" />;
-    }
-
-    return (
-        <View style={styles.container}>
-          <Text style={styles.header}>Profile</Text>
-          {profile && (
-            <>
-              <Text>Username: {profile.username}</Text>
-              <Text>Email: {profile.email}</Text>
-              <Text>Full Name: {profile.full_name || 'N/A'}</Text>
-              <Text>Phone: {profile.phone || 'N/A'}</Text>
-              <Text>Last Login: {profile.last_login}</Text>
-              <Text>Date Joined: {profile.date_joined}</Text>
-            </>
-          )}
-        </View>
-      );
+  const handleSaveChanges = () => {
+    const updatedProfile = {
+      full_name: fullName,
+      user: {
+        email: email,
+        password: password,
+      },
+      address: address,
+      city: city,
+      state: state,
+      country: country,
+      gender: gender,
+      about: about,
+      // Ajoutez d'autres champs si nécessaire
     };
-    
-    const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        padding: 20,
-      },
-      header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-      },
-    });
+
+    api.put(`http://localhost:8000/api/v1/user/profile/${1}/`, updatedProfile)
+      .then(response => {
+        alert('Profile updated successfully');
+        setProfile(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  if (!profile) {
+    return <ActivityIndicator size={'large'} color={'orange'} />;
+  }
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.header}>Mon compte</Text>
+      <Image source={{ uri: profile.image }} style={styles.profileImage} />
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Informations personnelles</Text>
+        <TextInput
+          placeholder="Nom complet"
+          value={fullName}
+          onChangeText={setFullName}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="E-mail"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Mot de passe"
+          value={password}
+          onChangeText={setPassword}
+          style={styles.input}
+          secureTextEntry
+        />
+        <TextInput
+          placeholder="Genre"
+          value={gender}
+          onChangeText={setGender}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="À propos"
+          value={about}
+          onChangeText={setAbout}
+          style={styles.input}
+        />
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Adresse</Text>
+        <TextInput
+          placeholder="Adresse"
+          value={address}
+          onChangeText={setAddress}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Ville"
+          value={city}
+          onChangeText={setCity}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="État"
+          value={state}
+          onChangeText={setState}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Pays"
+          value={country}
+          onChangeText={setCountry}
+          style={styles.input}
+        />
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Méthodes de paiement</Text>
+        <TextInput
+          placeholder="Méthode de paiement"
+          value={methodsOfPayment.join(', ')}
+          onChangeText={text => setMethodsOfPayment(text.split(', '))}
+          style={styles.input}
+        />
+      </View>
+      <Button title="Enregistrer les modifications" onPress={handleSaveChanges} />
+    </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    padding: 20,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: 'gray',
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
+  },
+  section: {
+    marginBottom: 20,
+  },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    padding: 10,
+  },
+});
+
 
 export default AccountScreen;

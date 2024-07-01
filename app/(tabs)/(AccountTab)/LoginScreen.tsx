@@ -10,12 +10,17 @@ const LoginScreen = () => {
     const handleLogin = async () => {
         try {
             const response = await fetch('http://localhost:8000/api/v1/user/token/', {
-                method: 'POST',
+                method: 'OPTIONS',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
             });
+
+            console.log('Response', response);
 
             if (response.ok) {
                 const data = await response.json();
@@ -26,7 +31,6 @@ const LoginScreen = () => {
                     params: {
                         userId: data.user_id 
                     },
-                
                 });
             } else {
                 const data = await response.json();

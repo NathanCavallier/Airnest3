@@ -7,6 +7,12 @@ export default function AccountLayout() {
     <Stack screenOptions={{
       headerShown: false,
     }}>
+    <Stack.Screen
+      name="AccountScreen"
+      options={{
+        headerShown: false,
+      }}
+    />
       <Stack.Screen
         name="LoginScreen"
         options={{
@@ -15,12 +21,6 @@ export default function AccountLayout() {
       />
       <Stack.Screen
         name="RegisterScreen"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="AccountScreen"
         options={{
           headerShown: false,
         }}

@@ -1,0 +1,90 @@
+{
+    "_bodyBlob": {
+        "_data": {
+            "__collector": [Object
+            ],
+            "blobId": "BDA7E71E-6A34-4F47-9150-B5F659B91210",
+            "name": "token.json",
+            "offset": 0,
+            "size": 40,
+            "type": "application/json"
+        }
+    },
+    "_bodyInit": {
+        "_data": {
+            "__collector": [Object
+            ],
+            "blobId": "BDA7E71E-6A34-4F47-9150-B5F659B91210",
+            "name": "token.json",
+            "offset": 0,
+            "size": 40,
+            "type": "application/json"
+        }
+    },
+    "bodyUsed": false,
+    "headers": {
+        "map": {
+            "allow": "POST, OPTIONS",
+            "content-length": "40",
+            "content-type": "application/json",
+            "cross-origin-opener-policy": "same-origin",
+            "date": "Mon, 01 Jul 2024 09:00:00 GMT",
+            "referrer-policy": "same-origin",
+            "server": "WSGIServer/0.2 CPython/3.12.1",
+            "vary": "Accept, Origin",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "DENY"
+        }
+    },
+    "ok": false,
+    "status": 405,
+    "statusText": "",
+    "type": "default",
+    "url": "http://localhost:8000/api/v1/user/token/"
+}
+
+
+{
+    "_bodyBlob": {
+        "_data": {
+            "__collector": [Object
+            ],
+            "blobId": "464D0351-FAF8-4549-96EB-A1033B3F7752",
+            "name": "token.json",
+            "offset": 0,
+            "size": 358,
+            "type": "application/json"
+        }
+    },
+    "_bodyInit": {
+        "_data": {
+            "__collector": [Object
+            ],
+            "blobId": "464D0351-FAF8-4549-96EB-A1033B3F7752",
+            "name": "token.json",
+            "offset": 0,
+            "size": 358,
+            "type": "application/json"
+        }
+    },
+    "bodyUsed": false,
+    "headers": {
+        "map": {
+            "allow": "POST, OPTIONS",
+            "content-length": "358",
+            "content-type": "application/json",
+            "cross-origin-opener-policy": "same-origin",
+            "date": "Mon, 01 Jul 2024 09:02:22 GMT",
+            "referrer-policy": "same-origin",
+            "server": "WSGIServer/0.2 CPython/3.12.1",
+            "vary": "Accept, Origin",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "DENY"
+        }
+    },
+    "ok": true,
+    "status": 200,
+    "statusText": "",
+    "type": "default",
+    "url": "http://localhost:8000/api/v1/user/token/"
+}

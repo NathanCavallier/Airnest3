@@ -11,14 +11,14 @@ const MenuScreen: React.FC = () => {
     };
 
     const onLogout = () => {
-        router.push('app/(tabs)/(HomeTab)/Index');
+        router.push('app/(tabs)/(HomeTab)/index');
     };
 
     return (
         <View style={styles.container}>
             {isLoggedIn ? (
                 <>
-                    <Text style={styles.menuItem} onPress={() => router.push('/app/(tabs)/(AccountTab)/AccountScreen')}>Mes paramètres</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/AccountScreen')}>Mon compte</Text>
                     <Text style={styles.menuItem} onPress={() => router.push('orders')}>Mes commandes</Text>
                     <Text style={styles.menuItem} onPress={() => router.push('cgu')}>CGU</Text>
                     <Text style={styles.menuItem} onPress={() => router.push('legal')}>Mentions légales</Text>
