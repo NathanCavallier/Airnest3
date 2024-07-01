@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Alert, ScrollView, Image, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Alert, ScrollView, Image, TextInput, Button, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import { router, useLocalSearchParams } from 'expo-router';
 import { api } from '@/api';
@@ -151,13 +151,16 @@ const AccountScreen = ({ route }: { route: any }) => {
           style={styles.input}
         />
       </View>
-      <Button title="Enregistrer les modifications" onPress={handleSaveChanges} />
+      <TouchableOpacity style={styles.button} onPress={handleSaveChanges}>
+        <Text style={{ color: 'black' }}>Enregistrer les modifications</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexGrow: 1,
     padding: 20,
   },
@@ -187,6 +190,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     padding: 10,
+  },
+  button: {
+    width: '40%',
+    alignItems: 'center',
+    backgroundColor: 'orange',
+    borderRadius: 8,
+    padding: 10,
+    color: 'white',
   },
 });
 

@@ -14,7 +14,6 @@ const Header = (isLoggedIn: {isLoggedIn: boolean}) => {
   const [isMenu, setIsMenu] = useState(false);
   const [isSearch, setIsSearch] = useState(true);
   const state = navigation.getState();
-  const currentRoute = state?.routes[state.index] || { name: 'HomeScreen'};
   const [search, setSearch] = useState(false); // Variable pour désactiver le bouton de recherche
   const [searchOpacity, setSearchOpacity] = useState(1); // Variable pour gérer l'opacité du bouton de recherche
   const [menu, setMenu] = useState(false); // Variable pour désactiver le bouton de menu

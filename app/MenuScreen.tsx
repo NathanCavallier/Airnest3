@@ -20,7 +20,7 @@ const MenuScreen: React.FC = () => {
                 <>
                     <Text style={styles.menuItem} onPress={() => router.push('/AccountScreen')}>Mon compte</Text>
                     <Text style={styles.menuItem} onPress={() => router.push('orders')}>Mes commandes</Text>
-                    <Text style={styles.menuItem} onPress={() => router.push('cgu')}>CGU</Text>
+                    <Text style={styles.menuItem} onPress={() => router.push('/Cgu')}>CGU</Text>
                     <Text style={styles.menuItem} onPress={() => router.push('legal')}>Mentions légales</Text>
                     <Text style={styles.menuItem} onPress={() => router.push('contact')}>Contact</Text>
                     <Text style={styles.menuItem} onPress={() => router.push('about')}>À propos d’ÀIRNEIS</Text>
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     menuItem: {
         fontSize: 18,
         marginVertical: 10,
+        color: 'gray',
     },
 });
 

@@ -333,7 +333,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
     borderRadius: 8,
     padding: 10,
-
     color: 'white',
   },
   upButtons: {

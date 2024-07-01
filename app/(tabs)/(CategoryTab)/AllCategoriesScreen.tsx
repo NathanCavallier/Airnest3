@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import { api } from '@/api';
 import { router } from 'expo-router';
+import { ActivityIndicator } from 'react-native';
 
 const defaultImage = require('@/assets/images/default.png'); // Chemin de votre image par défaut
 
@@ -12,12 +13,22 @@ type Category = {
 };
 
 const AllCategoriesScreen = () => {
-
     const [categories, setCategories] = useState<Category[]>([]);
+    const [loading, setLoading] = useState(false);
+
+
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color="orange" />
+            </View>
+        );
+    }
 
     useEffect(() => {
         const fetchCategories = async () => {
             try {
+                setLoading(true);
                 const response = await api.get('products');
                 const data = response.data || [];
 
@@ -40,6 +51,7 @@ const AllCategoriesScreen = () => {
             }
         };
         fetchCategories();
+        setLoading(false);
     }, []);
 
     const handelPressCategory = (categoryTitle: string) => {
