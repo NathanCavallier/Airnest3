@@ -5,13 +5,13 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { api } from '@/api';
 
 type Profile = {
-    image: string | undefined;
-    username: string;
-    email: string;
-    full_name: string;
-    phone: string;
-    last_login: string;
-    date_joined: string;
+  image: string | undefined;
+  username: string;
+  email: string;
+  full_name: string;
+  phone: string;
+  last_login: string;
+  date_joined: string;
 };
 
 const AccountScreen = ({ route }: { route: any }) => {
@@ -168,6 +168,7 @@ const AccountScreen = ({ route }: { route: any }) => {
           },
           {
             text: 'Supprimer',
+            style: 'destructive',
             onPress: () => {
               api.delete(`http://localhost:8000/api/v1/user/profile/${1}/`)
                 .then(() => {
