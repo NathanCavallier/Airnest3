@@ -3,7 +3,7 @@ import { View, Text, Button, FlatList, Image, StyleSheet, ActivityIndicator, Tou
 import { api } from '@/api';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { string } from 'prop-types';
+
 
 interface CartItem {
   id: number;
