@@ -29,20 +29,25 @@ const AccountScreen = ({ route }: { route: any }) => {
   const [methodsOfPayment, setMethodsOfPayment] = useState<string[]>([]);
 
   useEffect(() => {
-    api.get(`http://localhost:8000/api/v1/user/profile/${1}/`)
+    api.get(`http://localhost:8000/api/v1/user/profile/${userId}/`)
       .then(response => {
-        setProfile(response.data);
-        setFullName(response.data.full_name);
-        setEmail(response.data.user.email);
-        setAddress(response.data.address);
-        setCity(response.data.city);
-        setState(response.data.state);
-        setCountry(response.data.country);
-        setGender(response.data.gender);
-        setAbout(response.data.about);
-        // Ajoutez d'autres champs si nécessaire
+        if (response.data) {
+          setProfile(response.data);
+          setFullName(response.data.full_name);
+          setEmail(response.data.user.email);
+          setAddress(response.data.address);
+          setCity(response.data.city);
+          setState(response.data.state);
+          setCountry(response.data.country);
+          setGender(response.data.gender);
+          setAbout(response.data.about);
+          // Ajoutez d'autres champs si nécessaire
+        } else {
+          router.push('app/(tabs)/(AccountTab)/LoginScreen');
+        }
       })
       .catch(error => {
+        router.push('LoginScreen');
         console.error(error);
       });
   }, [userId]);
@@ -63,7 +68,7 @@ const AccountScreen = ({ route }: { route: any }) => {
       // Ajoutez d'autres champs si nécessaire
     };
 
-    api.put(`http://localhost:8000/api/v1/user/profile/${1}/`, updatedProfile)
+    api.put(`http://localhost:8000/api/v1/user/profile/${userId}/`, updatedProfile)
       .then(response => {
         alert('Profile updated successfully');
         setProfile(response.data);

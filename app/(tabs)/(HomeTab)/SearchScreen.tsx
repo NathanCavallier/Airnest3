@@ -46,6 +46,7 @@ const SearchScreen = () => {
     let [minPrice, setMinPrice] = useState(filter.minPrice);
     let [maxPrice, setMaxPrice] = useState(filter.maxPrice);
     let [inStock, setInStock] = useState(filter.inStock);
+
     console.log('material: ', material);
     console.log('category: ', category);
     console.log('minPrice: ', minPrice);
@@ -60,6 +61,7 @@ const SearchScreen = () => {
         fetchResults();
     }, [searchQuery, sortOption]);
 
+    // Récupérer les résultats de la recherche
     const fetchResults = async () => {
         try {
             const response = await api.get('products', {
@@ -116,7 +118,7 @@ const SearchScreen = () => {
                                 sortedByCategory.push(element);
                             }
                         }
-                    );
+                        );
                     });
                     setResults(sortedByCategory);
                 }
@@ -128,7 +130,7 @@ const SearchScreen = () => {
                     setResults(sortedData);
                 }
                 if (inStock) {
-                    if (!displayClearButton) {
+                    if (!displayClearButton) { // Afficher le bouton d'annulation
                         setDisplayClearButton(true);
                     }
                     sortedData = sortedData.filter((item: { in_stock: boolean; }) => item.in_stock === true);
@@ -140,6 +142,7 @@ const SearchScreen = () => {
         }
     };
 
+    // Afficher le bouton d'annulation ou le bouton d'affichage de tous les articles
     function DisplayClearButton() {
         if (displayClearButton) {
             return (
@@ -150,7 +153,7 @@ const SearchScreen = () => {
                         setCategory([]);
                         setMinPrice('');
                         setMaxPrice('');
-                        setInStock(false);
+                        setInStock(false); // Réinitialiser les filtres
                         setSkipFilter(true);
                         setDisplayItems(true);
                         setDisplayClearButton(false);
@@ -159,7 +162,7 @@ const SearchScreen = () => {
                     <Text>Annuler</Text>
                 </TouchableOpacity>
             );
-        } else if(displyItems) {
+        } else if (displyItems) {
             return (
                 <TouchableOpacity
                     style={styles.filterButton}
@@ -176,6 +179,39 @@ const SearchScreen = () => {
 
     const handleSearchChange = (text: React.SetStateAction<string>) => { setSearchQuery(text); };
     const handleSortChange = (value: React.SetStateAction<string>) => setSortOption(value);
+
+    // Afficher les filtres sélectionnés
+    function displaySelectedFilters() {
+        // Afficher les filtres sélectionnés
+        if (material.length > 0 || category.length > 0 || minPrice || maxPrice || inStock) {
+            let selectedFilters = '';
+            if (material.length > 0) {
+                material.forEach((element: string) => {
+                    selectedFilters += element + ', ';
+                });
+            }
+            if (category.length > 0) {
+                category.forEach((element: string) => {
+                    selectedFilters += element + ', ';
+                });
+            }
+            if (minPrice) {
+                selectedFilters += 'minPrice: ' + minPrice + ', ';
+            }
+            if (maxPrice) {
+                selectedFilters += 'maxPrice: ' + maxPrice + ', ';
+            }
+            if (inStock) {
+                selectedFilters += 'Articles en stock, ';
+            }
+            return (
+                <Text style={{ margin: 5 }} >
+                    Filtres sélectionnés: <Text style={{ color: 'orange' }}>{selectedFilters}</Text>
+                </Text>
+            );
+        }
+    }
+
 
     return (
         <View style={styles.container}>
@@ -197,6 +233,7 @@ const SearchScreen = () => {
                 value={searchQuery}
                 onChangeText={handleSearchChange}
             />
+            {displaySelectedFilters()}
             <View style={styles.sortContainer}>
                 <Text>Trier par:</Text>
                 <TouchableOpacity onPress={() => handleSortChange('price_asc')}>

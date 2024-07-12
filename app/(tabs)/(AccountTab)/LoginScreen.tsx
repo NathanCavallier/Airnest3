@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { useFonts } from 'expo-font';
 import { router } from 'expo-router';
 
@@ -29,7 +29,7 @@ const LoginScreen = () => {
                 router.push({
                     pathname: 'AccountScreen',
                     params: {
-                        userId: data.user_id 
+                        userId: data.user_id
                     },
                 });
             } else {
@@ -43,12 +43,16 @@ const LoginScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Login</Text>
-            <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
-            <TextInput placeholder="Password" value={password} onChangeText={setPassword} style={styles.input} secureTextEntry />
-            <Button title="Login" onPress={handleLogin} />
-            <Button title="Forgot Password?" onPress={() => router.push('/(AccountTab)/ForgotPasswordScreen')} />
-            <Button title="Register" onPress={() => router.push('/(AccountTab)/RegisterScreen')} />
+            <Text style={styles.header}>Se connecter</Text>
+            <ScrollView>
+                <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
+                <TextInput placeholder="Password" value={password} onChangeText={setPassword} style={styles.input} secureTextEntry />
+                <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                    <Text>Se connecter</Text>
+                </TouchableOpacity>
+                <Button title="Mot de passe oublié ?" onPress={() => router.push('/(AccountTab)/ForgotPasswordScreen')} />
+                <Button title="Nouveau compte" onPress={() => router.push('/(AccountTab)/RegisterScreen')} />
+            </ScrollView>
         </View>
     );
 };
@@ -62,6 +66,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
+        color: 'gray',
     },
     input: {
         height: 40,
@@ -69,6 +74,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 20,
         padding: 10,
+    },
+    button: {
+        padding: 10,
+        backgroundColor: '#ddd',
+        borderRadius: 5,
+        marginRight: 5,
+        alignItems: 'center',
+        width: '50%',
     },
 });
 
