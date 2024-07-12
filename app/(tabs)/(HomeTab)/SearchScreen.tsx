@@ -131,7 +131,7 @@ const SearchScreen = () => {
                     if (!displayClearButton) {
                         setDisplayClearButton(true);
                     }
-                    sortedData = sortedData.filter((item: { inStock: boolean; }) => item.inStock);
+                    sortedData = sortedData.filter((item: { in_stock: boolean; }) => item.in_stock === true);
                     setResults(sortedData);
                 }
             }
