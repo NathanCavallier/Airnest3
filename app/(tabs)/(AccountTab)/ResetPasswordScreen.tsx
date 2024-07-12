@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native';
 
 const ResetPasswordScreen = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -34,9 +34,13 @@ const ResetPasswordScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Reset Password</Text>
-      <TextInput placeholder="New Password" value={newPassword} onChangeText={setNewPassword} style={styles.input} secureTextEntry />
-      <TextInput placeholder="Confirm Password" value={confirmPassword} onChangeText={setConfirmPassword} style={styles.input} secureTextEntry />
-      <Button title="Reset Password" onPress={handleChangePassword} />
+      <ScrollView>
+        <TextInput placeholder="New Password" value={newPassword} onChangeText={setNewPassword} style={styles.input} secureTextEntry />
+        <TextInput placeholder="Confirm Password" value={confirmPassword} onChangeText={setConfirmPassword} style={styles.input} secureTextEntry />
+        <TouchableOpacity style={styles.button} onPress={handleChangePassword}>
+          <Text>Reset Password</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };
@@ -57,6 +61,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 20,
     padding: 10,
+  },
+  button: {
+      padding: 10,
+      backgroundColor: '#ddd',
+      borderRadius: 5,
+      marginRight: 5,
+      alignItems: 'center',
+      width: '50%',
+  },
+  simpleText: {
+      alignItems: 'center',
+      color: 'gray',
+      marginTop: 10,
   },
 });
 

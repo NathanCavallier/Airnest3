@@ -50,9 +50,13 @@ const LoginScreen = () => {
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
                     <Text>Se connecter</Text>
                 </TouchableOpacity>
-                <Button title="Mot de passe oublié ?" onPress={() => router.push('/(AccountTab)/ForgotPasswordScreen')} />
-                <Button title="Nouveau compte" onPress={() => router.push('/(AccountTab)/RegisterScreen')} />
             </ScrollView>
+            <TouchableOpacity style={styles.simpleText} onPress={() => router.push('/(AccountTab)/ForgotPasswordScreen')}>
+                <Text>Mot de passe oublié ?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.simpleText} onPress={() => router.push('/(AccountTab)/RegisterScreen')}>
+                <Text>Créer un compte</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -82,6 +86,11 @@ const styles = StyleSheet.create({
         marginRight: 5,
         alignItems: 'center',
         width: '50%',
+    },
+    simpleText: {
+        alignItems: 'center',
+        color: 'gray',
+        marginTop: 10,
     },
 });
 

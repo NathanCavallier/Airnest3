@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import { useFonts } from 'expo-font';
+import { router, useLocalSearchParams } from 'expo-router';
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');
@@ -20,9 +22,13 @@ const ForgotPasswordScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Forgot Password</Text>
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} />
-      <Button title="Reset Password" onPress={handlePasswordReset} />
+      <Text style={styles.header}>Mot de passe oublié</Text>
+      <ScrollView>
+        <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} />
+        <TouchableOpacity style={styles.button} onPress={handlePasswordReset}>
+          <Text>Réinitialiser le mot de passe</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };
@@ -33,9 +39,10 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: 'gray',
   },
   input: {
     height: 40,
@@ -43,6 +50,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 20,
     padding: 10,
+  },
+  button: {
+      padding: 10,
+      backgroundColor: '#ddd',
+      borderRadius: 5,
+      marginRight: 5,
+      alignItems: 'center',
+      width: '50%',
+  },
+  simpleText: {
+      alignItems: 'center',
+      color: 'gray',
+      marginTop: 10,
   },
 });
 
